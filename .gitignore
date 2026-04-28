@@ -7,3 +7,5 @@ docker/mysql/data_broken_*/
 # Environment files
 .env
 .env.*
+!.env.example
+
