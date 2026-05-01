@@ -8,4 +8,35 @@ use Illuminate\Database\Eloquent\Model;
 class AttendanceCorrectionRequest extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'attendance_id',
+        'user_id',
+        'requested_clock_in',
+        'requested_clock_out',
+        'reason',
+        'status',
+        'approved_by',
+        'approved_at',
+    ];
+
+    public function attendance()
+    {
+        return $this->belongsTo(Attendance::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function approvedBy()
+    {
+        return $this->belongsTo(User::class, 'approved_by');
+    }
+
+    public function breakCorrectionRequests()
+    {
+        return $this->hasMany(BreakCorrectionRequest::class);
+    }
 }
