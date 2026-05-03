@@ -10,7 +10,7 @@
     <h1>{{ $title }}</h1>
     <p>仮ページです。</p>
 
-    <form action="/logout" method="post">
+    <form action="{{ request()->is('admin/*') ? route('admin.logout') : route('logout') }}" method="POST">
         @csrf
         <button type="submit">ログアウト</button>
     </form>

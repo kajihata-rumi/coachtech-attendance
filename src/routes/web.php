@@ -9,6 +9,8 @@ Route::get('/', function () {
 
 Route::get('/admin/login', [LoginController::class, 'showLoginForm']);
 Route::post('/admin/login', [LoginController::class, 'login']);
+Route::post('/admin/logout', [LoginController::class, 'logout'])
+    ->name('admin.logout');
 
 Route::get('/home', function () {
     return redirect('/attendance');

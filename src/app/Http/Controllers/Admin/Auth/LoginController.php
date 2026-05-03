@@ -1,20 +1,17 @@
 <?php
-
 namespace App\Http\Controllers\Admin\Auth;
-
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminLoginRequest;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
-
 class LoginController extends Controller
 {
     public function showLoginForm(): View
     {
         return view('admin.auth.login');
     }
-
     public function login(AdminLoginRequest $request): RedirectResponse
     {
         $credentials = $request->only('email', 'password');
@@ -37,7 +34,15 @@ class LoginController extends Controller
                 'email' => '管理者アカウントでログインしてください',
             ])->onlyInput('email');
         }
-
         return redirect('/admin/attendance/list');
     }
+    public function logout(Request $request)
+{
+    Auth::logout();
+
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+
+    return redirect('/admin/login');
+}
 }

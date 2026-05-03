@@ -18,7 +18,7 @@
     <main class="auth">
         <h1 class="auth__title">ログイン</h1>
 
-        <form class="auth-form" action="/login" method="post">
+        <form class="auth-form" action="/login" method="post" novalidate>
             @csrf
 
             <div class="auth-form__group">
