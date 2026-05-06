@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AttendanceController;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -17,9 +18,9 @@ Route::get('/home', function () {
 })->middleware('auth');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/attendance', function () {
-        return view('tmp-page', ['title' => '勤怠登録画面']);
-    });
+    Route::get('/attendance', [AttendanceController::class, 'index']);
+    Route::post('/attendance/clock-in', [AttendanceController::class, 'clockIn'])
+        ->name('attendance.clock_in');
 
     Route::get('/attendance/list', function () {
         return view('tmp-page', ['title' => '勤怠一覧画面']);
@@ -30,7 +31,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 });
 
-Route::middleware(['auth'])->group(function () {
     Route::get('/admin/attendance/list', function () {
         return view('tmp-page', ['title' => '管理者：勤怠一覧画面']);
     });
@@ -42,4 +42,4 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin/stamp_correction_request/list', function () {
         return view('tmp-page', ['title' => '管理者：申請一覧画面']);
     });
-});
+
