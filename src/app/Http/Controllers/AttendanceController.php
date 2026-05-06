@@ -43,6 +43,29 @@ class AttendanceController extends Controller
         return redirect('/attendance');
     }
 
+    public function clockOut()
+{
+    $attendance = $this->getTodayAttendance();
+
+    if (!$attendance || $attendance->status !== 'working') {
+        return redirect('/attendance');
+    }
+
+    $activeBreak = BreakTime::where('attendance_id', $attendance->id)
+        ->whereNull('break_end')
+        ->first();
+
+    if ($activeBreak) {
+        return redirect('/attendance');
+    }
+
+    $attendance->update([
+        'clock_out' => Carbon::now()->format('H:i'),
+        'status' => 'completed',
+    ]);
+
+    return redirect('/attendance');
+}
     public function breakStart()
     {
         $attendance = $this->getTodayAttendance();
