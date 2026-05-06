@@ -146,6 +146,19 @@ public function attendanceList()
         return redirect('/attendance');
     }
 
+    public function show(Attendance $attendance)
+{
+    if ($attendance->user_id !== Auth::id()) {
+        abort(403);
+    }
+
+    $attendance->load('breakTimes');
+
+    return view('attendance.detail', [
+        'attendance' => $attendance,
+        'user' => Auth::user(),
+    ]);
+}
     private function getTodayAttendance()
     {
         $today = Carbon::today();

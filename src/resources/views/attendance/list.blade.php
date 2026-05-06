@@ -79,7 +79,7 @@
                         <td>{{ $workMinutes > 0 ? sprintf('%d:%02d', floor($workMinutes / 60), $workMinutes % 60) : '' }}</td>
                         <td>
                             @if ($attendance)
-                                <a href="#">詳細</a>
+                                <a href="{{ route('attendance.show', $attendance->id) }}">詳細</a>
                             @endif
                         </td>
                     </tr>
