@@ -32,9 +32,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/attendance/break-end', [AttendanceController::class, 'breakEnd'])
     ->name('attendance.break_end');
 
-    Route::get('/attendance/list', function () {
-        return view('tmp-page', ['title' => '勤怠一覧画面']);
-    });
+    Route::get('/attendance/list', [AttendanceController::class, 'attendanceList'])
+    ->name('attendance.list');
 
     Route::get('/stamp_correction_request/list', function () {
         return view('tmp-page', ['title' => '申請一覧画面']);
