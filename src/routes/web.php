@@ -19,8 +19,15 @@ Route::get('/home', function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/attendance', [AttendanceController::class, 'index']);
+
     Route::post('/attendance/clock-in', [AttendanceController::class, 'clockIn'])
         ->name('attendance.clock_in');
+
+    Route::post('/attendance/break-start', [AttendanceController::class, 'breakStart'])
+    ->name('attendance.break_start');
+
+    Route::post('/attendance/break-end', [AttendanceController::class, 'breakEnd'])
+    ->name('attendance.break_end');
 
     Route::get('/attendance/list', function () {
         return view('tmp-page', ['title' => '勤怠一覧画面']);

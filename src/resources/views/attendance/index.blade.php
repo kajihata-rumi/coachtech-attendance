@@ -31,14 +31,22 @@
                 @csrf
                 <button type="submit">出勤</button>
             </form>
+
         @elseif ($status === 'working')
-            <button type="button">退勤</button>
-            <button type="button">休憩入</button>
-        @elseif ($status === 'on_break')
-            <button type="button">休憩戻</button>
-        @elseif ($status === 'finished')
-            <p>お疲れ様でした。</p>
-        @endif
+    <button type="button">退勤</button>
+
+    <form action="{{ route('attendance.break_start') }}" method="POST" style="display:inline;">
+        @csrf
+        <button type="submit">休憩入</button>
+    </form>
+@elseif ($status === 'on_break')
+    <form action="{{ route('attendance.break_end') }}" method="POST">
+        @csrf
+        <button type="submit">休憩戻</button>
+    </form>
+@elseif ($status === 'completed')
+    <p>お疲れ様でした。</p>
+@endif
     </main>
 </body>
 </html>

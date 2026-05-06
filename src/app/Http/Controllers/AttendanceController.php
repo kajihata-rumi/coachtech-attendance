@@ -1,7 +1,9 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Attendance;
+use App\Models\BreakTime;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
@@ -9,12 +11,7 @@ class AttendanceController extends Controller
 {
     public function index()
     {
-        $today = Carbon::today();
-
-        $attendance = Attendance::where('user_id', Auth::id())
-            ->where('work_date', $today->toDateString())
-            ->first();
-
+        $attendance = $this->getTodayAttendance();
         $status = $attendance ? $attendance->status : 'before_work';
 
         return view('attendance.index', [
@@ -25,13 +22,12 @@ class AttendanceController extends Controller
             'time' => Carbon::now()->format('H:i'),
         ]);
     }
+
     public function clockIn()
     {
         $today = Carbon::today();
 
-        $attendance = Attendance::where('user_id', Auth::id())
-            ->where('work_date', $today->toDateString())
-            ->first();
+        $attendance = $this->getTodayAttendance();
 
         if ($attendance) {
             return redirect('/attendance');
@@ -46,12 +42,74 @@ class AttendanceController extends Controller
 
         return redirect('/attendance');
     }
+
+    public function breakStart()
+    {
+        $attendance = $this->getTodayAttendance();
+
+        if (!$attendance || $attendance->status !== 'working') {
+            return redirect('/attendance');
+        }
+
+        $activeBreak = BreakTime::where('attendance_id', $attendance->id)
+            ->whereNull('break_end')
+            ->first();
+
+        if (!$activeBreak) {
+            BreakTime::create([
+                'attendance_id' => $attendance->id,
+                'break_start' => Carbon::now()->format('H:i'),
+            ]);
+
+            $attendance->update([
+                'status' => 'on_break',
+            ]);
+        }
+
+        return redirect('/attendance');
+    }
+
+    public function breakEnd()
+    {
+        $attendance = $this->getTodayAttendance();
+
+        if (!$attendance || $attendance->status !== 'on_break') {
+            return redirect('/attendance');
+        }
+
+        $breakTime = BreakTime::where('attendance_id', $attendance->id)
+            ->whereNull('break_end')
+            ->latest()
+            ->first();
+
+        if ($breakTime) {
+            $breakTime->update([
+                'break_end' => Carbon::now()->format('H:i'),
+            ]);
+
+            $attendance->update([
+                'status' => 'working',
+            ]);
+        }
+
+        return redirect('/attendance');
+    }
+
+    private function getTodayAttendance()
+    {
+        $today = Carbon::today();
+
+        return Attendance::where('user_id', Auth::id())
+            ->where('work_date', $today->toDateString())
+            ->first();
+    }
+
     private function getStatusLabel($status)
     {
         return match ($status) {
             'working' => '出勤中',
             'on_break' => '休憩中',
-            'finished' => '退勤済',
+            'completed' => '退勤済',
             default => '勤務外',
         };
     }
