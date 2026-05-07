@@ -6,6 +6,7 @@ use App\Models\Attendance;
 use App\Models\BreakTime;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use App\Models\AttendanceCorrectionRequest;
 use Carbon\CarbonPeriod;
 
 class AttendanceController extends Controller
@@ -154,9 +155,17 @@ public function attendanceList()
 
     $attendance->load('breakTimes');
 
+    $pendingCorrectionRequest = AttendanceCorrectionRequest::with('breakCorrectionRequests')
+        ->where('attendance_id', $attendance->id)
+        ->where('user_id', Auth::id())
+        ->where('status', 'pending')
+        ->latest()
+        ->first();
+
     return view('attendance.detail', [
         'attendance' => $attendance,
         'user' => Auth::user(),
+        'pendingCorrectionRequest' => $pendingCorrectionRequest,
     ]);
 }
     private function getTodayAttendance()

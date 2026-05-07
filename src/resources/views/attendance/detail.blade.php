@@ -21,6 +21,10 @@
     </header>
 
     <main>
+        @php
+        $isPendingCorrection = !is_null($pendingCorrectionRequest);
+        @endphp
+
         <h1>勤怠詳細</h1>
 
         <table border="1">
@@ -38,28 +42,57 @@
             <tr>
                 <th>出勤・退勤</th>
                 <td>
-                    {{ $attendance->clock_in ? \Carbon\Carbon::parse($attendance->clock_in)->format('H:i') : '' }}
+                    {{
+                        $isPendingCorrection && $pendingCorrectionRequest->requested_clock_in
+                            ? \Carbon\Carbon::parse($pendingCorrectionRequest->requested_clock_in)->format('H:i')
+                            : ($attendance->clock_in ? \Carbon\Carbon::parse($attendance->clock_in)->format('H:i') : '')
+                    }}
                 </td>
                 <td>〜</td>
                 <td>
-                    {{ $attendance->clock_out ? \Carbon\Carbon::parse($attendance->clock_out)->format('H:i') : '' }}
+                    {{
+                        $isPendingCorrection && $pendingCorrectionRequest->requested_clock_out
+                            ? \Carbon\Carbon::parse($pendingCorrectionRequest->requested_clock_out)->format('H:i')
+                            : ($attendance->clock_out ? \Carbon\Carbon::parse($attendance->clock_out)->format('H:i') : '')
+                    }}
                 </td>
             </tr>
 
-            @foreach ($attendance->breakTimes as $index => $breakTime)
-                <tr>
-                    <th>{{ $index === 0 ? '休憩' : '休憩' . ($index + 1) }}</th>
-                    <td>
-                        {{ $breakTime->break_start ? \Carbon\Carbon::parse($breakTime->break_start)->format('H:i') : '' }}
-                    </td>
-                    <td>〜</td>
-                    <td>
-                        {{ $breakTime->break_end ? \Carbon\Carbon::parse($breakTime->break_end)->format('H:i') : '' }}
-                    </td>
-                </tr>
-            @endforeach
-
-            @if ($attendance->breakTimes->count() === 0)
+            @if ($isPendingCorrection && $pendingCorrectionRequest->breakCorrectionRequests->count() > 0)
+                @foreach ($pendingCorrectionRequest->breakCorrectionRequests as $index => $breakCorrectionRequest)
+                    <tr>
+                        <th>{{ $index === 0 ? '休憩' : '休憩' . ($index + 1) }}</th>
+                        <td>
+                            {{
+                                $breakCorrectionRequest->requested_break_start
+                                    ? \Carbon\Carbon::parse($breakCorrectionRequest->requested_break_start)->format('H:i')
+                                    : ''
+                            }}
+                        </td>
+                        <td>〜</td>
+                        <td>
+                            {{
+                                $breakCorrectionRequest->requested_break_end
+                                    ? \Carbon\Carbon::parse($breakCorrectionRequest->requested_break_end)->format('H:i')
+                                    : ''
+                            }}
+                        </td>
+                    </tr>
+                @endforeach
+            @elseif ($attendance->breakTimes->count() > 0)
+                @foreach ($attendance->breakTimes as $index => $breakTime)
+                    <tr>
+                        <th>{{ $index === 0 ? '休憩' : '休憩' . ($index + 1) }}</th>
+                        <td>
+                            {{ $breakTime->break_start ? \Carbon\Carbon::parse($breakTime->break_start)->format('H:i') : '' }}
+                        </td>
+                        <td>〜</td>
+                        <td>
+                            {{ $breakTime->break_end ? \Carbon\Carbon::parse($breakTime->break_end)->format('H:i') : '' }}
+                        </td>
+                    </tr>
+                @endforeach
+            @else
                 <tr>
                     <th>休憩</th>
                     <td></td>
@@ -71,12 +104,16 @@
             <tr>
                 <th>備考</th>
                 <td colspan="3">
-                    <textarea readonly>{{ $attendance->remarks ?? '' }}</textarea>
+                    <textarea readonly>{{ $isPendingCorrection ? $pendingCorrectionRequest->reason : ($attendance->remarks ?? '') }}</textarea>
                 </td>
             </tr>
         </table>
 
-        <button type="button">修正</button>
+        @if ($isPendingCorrection)
+            <p style="color: red;">*承認待ちのため修正はできません。</p>
+        @else
+            <button type="button">修正</button>
+        @endif
     </main>
 </body>
 </html>
