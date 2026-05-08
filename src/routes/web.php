@@ -18,7 +18,8 @@ Route::get('/home', function () {
 })->middleware('auth');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/attendance', [AttendanceController::class, 'index']);
+    Route::get('/attendance', [AttendanceController::class, 'index'])
+    ->name('attendance.index');
 
     Route::post('/attendance/clock-in', [AttendanceController::class, 'clockIn'])
         ->name('attendance.clock_in');
@@ -41,9 +42,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/attendance/detail/{attendance}', [AttendanceController::class, 'storeCorrection'])
     ->name('attendance.correction.store');
 
-    Route::get('/stamp_correction_request/list', function () {
-        return view('tmp-page', ['title' => '申請一覧画面']);
-    });
+    Route::get('/stamp_correction_request/list', [AttendanceController::class, 'correctionRequestList'])
+    ->name('stamp_correction_request.list');
 });
 
     Route::get('/admin/attendance/list', function () {

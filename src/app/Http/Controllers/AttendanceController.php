@@ -206,6 +206,38 @@ public function storeCorrection(AttendanceCorrectionStoreRequest $request, Atten
 
     return redirect()->route('attendance.show', $attendance);
 }
+public function correctionRequestList()
+{
+    $userId = auth()->id();
+
+    $pendingRequests = DB::table('attendance_correction_requests')
+        ->join('attendances', 'attendance_correction_requests.attendance_id', '=', 'attendances.id')
+        ->join('users', 'attendance_correction_requests.user_id', '=', 'users.id')
+        ->where('attendance_correction_requests.user_id', $userId)
+        ->where('attendance_correction_requests.status', 'pending')
+        ->select(
+            'attendance_correction_requests.*',
+            'attendances.work_date as attendance_date',
+            'users.name as user_name'
+        )
+        ->orderBy('attendance_correction_requests.created_at', 'desc')
+        ->get();
+
+    $approvedRequests = DB::table('attendance_correction_requests')
+        ->join('attendances', 'attendance_correction_requests.attendance_id', '=', 'attendances.id')
+        ->join('users', 'attendance_correction_requests.user_id', '=', 'users.id')
+        ->where('attendance_correction_requests.user_id', $userId)
+        ->where('attendance_correction_requests.status', 'approved')
+        ->select(
+            'attendance_correction_requests.*',
+            'attendances.work_date as attendance_date',
+            'users.name as user_name'
+        )
+        ->orderBy('attendance_correction_requests.created_at', 'desc')
+        ->get();
+
+    return view('stamp_correction_request.list', compact('pendingRequests', 'approvedRequests'));
+}
     private function getTodayAttendance()
     {
         $today = Carbon::today();
