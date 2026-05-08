@@ -38,6 +38,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/attendance/detail/{attendance}', [AttendanceController::class, 'show'])
     ->name('attendance.show');
 
+    Route::post('/attendance/detail/{attendance}', [AttendanceController::class, 'storeCorrection'])
+    ->name('attendance.correction.store');
+
     Route::get('/stamp_correction_request/list', function () {
         return view('tmp-page', ['title' => '申請一覧画面']);
     });

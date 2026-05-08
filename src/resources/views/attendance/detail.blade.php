@@ -32,6 +32,11 @@
             $break2 = $attendance->breakTimes->get(1);
         @endphp
 
+@if (!$isPendingCorrection)
+    <form action="{{ route('attendance.correction.store', $attendance) }}" method="POST">
+        @csrf
+@endif
+
 <table border="1">
     @if ($isPendingCorrection)
         {{-- 承認待ち：表示専用 --}}
@@ -171,10 +176,19 @@
     @endif
 </table>
 
+@if (!$isPendingCorrection && $errors->any())
+    <div style="color: red;">
+        @foreach ($errors->all() as $error)
+            <p>{{ $error }}</p>
+        @endforeach
+    </div>
+@endif
+
         @if ($isPendingCorrection)
             <p style="color: red;">*承認待ちのため修正はできません。</p>
         @else
-            <button type="button">修正</button>
+            <button type="submit">修正</button>
+            </form>
         @endif
     </main>
 </body>

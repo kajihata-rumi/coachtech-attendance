@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AttendanceCorrectionStoreRequest;
 use App\Models\Attendance;
 use App\Models\BreakTime;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use App\Models\AttendanceCorrectionRequest;
 use Carbon\CarbonPeriod;
+use Illuminate\Support\Facades\DB;
 
 class AttendanceController extends Controller
 {
@@ -167,6 +169,42 @@ public function attendanceList()
         'user' => Auth::user(),
         'pendingCorrectionRequest' => $pendingCorrectionRequest,
     ]);
+}
+public function storeCorrection(AttendanceCorrectionStoreRequest $request, Attendance $attendance)
+{
+    if ($attendance->user_id !== Auth::id()) {
+        abort(403);
+    }
+
+    $validated = $request->validated();
+
+    DB::transaction(function () use ($validated, $attendance) {
+        $correctionRequest = AttendanceCorrectionRequest::create([
+            'attendance_id' => $attendance->id,
+            'user_id' => Auth::id(),
+            'requested_clock_in' => $validated['clock_in'],
+            'requested_clock_out' => $validated['clock_out'],
+            'reason' => $validated['reason'],
+            'status' => 'pending',
+        ]);
+
+        foreach ($validated['breaks'] ?? [] as $break) {
+            $start = $break['start'] ?? null;
+            $end = $break['end'] ?? null;
+
+            if (empty($start) && empty($end)) {
+                continue;
+            }
+
+            $correctionRequest->breakCorrectionRequests()->create([
+                'break_time_id' => !empty($break['id']) ? $break['id'] : null,
+                'requested_break_start' => $start,
+                'requested_break_end' => $end,
+            ]);
+        }
+    });
+
+    return redirect()->route('attendance.show', $attendance);
 }
     private function getTodayAttendance()
     {
