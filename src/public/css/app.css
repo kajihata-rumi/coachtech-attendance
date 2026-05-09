@@ -258,3 +258,56 @@ main:not(.auth) .error-message {
     font-weight: bold;
     margin-top: 8px;
 }
+
+/* =========================
+   Header Adjustment
+========================= */
+
+body > header:not(.auth-header) > div {
+    margin-right: 40px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+body > header:not(.auth-header) nav {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+}
+
+body > header:not(.auth-header) nav form {
+    margin: 0;
+}
+
+body > header:not(.auth-header) nav a,
+body > header:not(.auth-header) nav button {
+    font-size: 16px;
+}
+
+/* =========================
+   Header Logo
+========================= */
+
+body > header:not(.auth-header) .header__logo {
+    display: flex;
+    align-items: center;
+    margin-right: 40px;
+}
+
+body > header:not(.auth-header) .header__logo-img {
+    width: 260px;
+    height: auto;
+    display: block;
+}
+
+body > header:not(.auth-header) nav {
+    display: flex;
+    align-items: center;
+    gap: 36px;
+    margin-left: auto;
+}
+
+body > header:not(.auth-header) nav a,
+body > header:not(.auth-header) nav button {
+    margin-right: 0;
+}

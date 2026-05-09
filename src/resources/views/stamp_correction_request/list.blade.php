@@ -9,7 +9,9 @@
 
 <body>
     <header>
-        <div>COACHTECH</div>
+        <a class="header__logo" href="/attendance">
+    <img class="header__logo-img" src="{{ asset('images/coachtech-logo.png') }}" alt="COACHTECH">
+</a>
         <nav>
             <a href="{{ route('attendance.index') }}">勤怠</a>
             <a href="{{ route('attendance.list') }}">勤怠一覧</a>

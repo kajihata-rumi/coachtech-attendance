@@ -7,7 +7,9 @@
 </head>
 <body>
     <header>
-        <div>COACHTECH</div>
+        <a class="header__logo" href="/attendance">
+    <img class="header__logo-img" src="{{ asset('images/coachtech-logo.png') }}" alt="COACHTECH">
+</a>
 
         <nav>
             <a href="/attendance">勤怠</a>
