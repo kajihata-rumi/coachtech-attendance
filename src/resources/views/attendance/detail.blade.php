@@ -40,36 +40,48 @@
         @csrf
 @endif
 
-<table border="1">
+<table class="detail-table">
     @if ($isPendingCorrection)
         {{-- 承認待ち：表示専用 --}}
         <tr>
             <th>名前</th>
-            <td colspan="3">{{ $user->name }}</td>
+            <td>
+                <div class="detail-table__name">
+                    <span>{{ $user->name }}</span>
+                </div>
+            </td>
         </tr>
 
         <tr>
             <th>日付</th>
-            <td>{{ \Carbon\Carbon::parse($attendance->work_date)->format('Y年') }}</td>
-            <td colspan="2">{{ \Carbon\Carbon::parse($attendance->work_date)->format('n月j日') }}</td>
+            <td>
+                <div class="detail-table__date">
+                    <span>{{ \Carbon\Carbon::parse($attendance->work_date)->format('Y年') }}</span>
+                    <span>{{ \Carbon\Carbon::parse($attendance->work_date)->format('n月j日') }}</span>
+                </div>
+            </td>
         </tr>
 
         <tr>
             <th>出勤・退勤</th>
             <td>
-                {{
-                    $pendingCorrectionRequest->requested_clock_in
-                        ? \Carbon\Carbon::parse($pendingCorrectionRequest->requested_clock_in)->format('H:i')
-                        : ''
-                }}
-            </td>
-            <td>〜</td>
-            <td>
-                {{
-                    $pendingCorrectionRequest->requested_clock_out
-                        ? \Carbon\Carbon::parse($pendingCorrectionRequest->requested_clock_out)->format('H:i')
-                        : ''
-                }}
+                <div class="detail-table__time-range">
+                    <span>
+                        {{
+                            $pendingCorrectionRequest->requested_clock_in
+                                ? \Carbon\Carbon::parse($pendingCorrectionRequest->requested_clock_in)->format('H:i')
+                                : ''
+                        }}
+                    </span>
+                    <span>〜</span>
+                    <span>
+                        {{
+                            $pendingCorrectionRequest->requested_clock_out
+                                ? \Carbon\Carbon::parse($pendingCorrectionRequest->requested_clock_out)->format('H:i')
+                                : ''
+                        }}
+                    </span>
+                </div>
             </td>
         </tr>
 
@@ -77,56 +89,74 @@
             <tr>
                 <th>{{ $index === 0 ? '休憩' : '休憩' . ($index + 1) }}</th>
                 <td>
-                    {{
-                        $breakCorrectionRequest->requested_break_start
-                            ? \Carbon\Carbon::parse($breakCorrectionRequest->requested_break_start)->format('H:i')
-                            : ''
-                    }}
-                </td>
-                <td>〜</td>
-                <td>
-                    {{
-                        $breakCorrectionRequest->requested_break_end
-                            ? \Carbon\Carbon::parse($breakCorrectionRequest->requested_break_end)->format('H:i')
-                            : ''
-                    }}
+                    <div class="detail-table__time-range">
+                        <span>
+                            {{
+                                $breakCorrectionRequest->requested_break_start
+                                    ? \Carbon\Carbon::parse($breakCorrectionRequest->requested_break_start)->format('H:i')
+                                    : ''
+                            }}
+                        </span>
+                        <span>〜</span>
+                        <span>
+                            {{
+                                $breakCorrectionRequest->requested_break_end
+                                    ? \Carbon\Carbon::parse($breakCorrectionRequest->requested_break_end)->format('H:i')
+                                    : ''
+                            }}
+                        </span>
+                    </div>
                 </td>
             </tr>
         @endforeach
 
         <tr>
             <th>備考</th>
-            <td colspan="3">{{ $pendingCorrectionRequest->reason }}</td>
+            <td>
+                <div class="detail-table__textarea">
+                    <span>{{ $pendingCorrectionRequest->reason }}</span>
+                </div>
+            </td>
         </tr>
     @else
         {{-- 通常時：編集可能 --}}
         <tr>
             <th>名前</th>
-            <td colspan="3">{{ $user->name }}</td>
+            <td>
+                <div class="detail-table__name">
+                    <span>{{ $user->name }}</span>
+                </div>
+            </td>
         </tr>
 
         <tr>
             <th>日付</th>
-            <td>{{ \Carbon\Carbon::parse($attendance->work_date)->format('Y年') }}</td>
-            <td colspan="2">{{ \Carbon\Carbon::parse($attendance->work_date)->format('n月j日') }}</td>
+            <td>
+                <div class="detail-table__date">
+                    <span>{{ \Carbon\Carbon::parse($attendance->work_date)->format('Y年') }}</span>
+                    <span>{{ \Carbon\Carbon::parse($attendance->work_date)->format('n月j日') }}</span>
+                </div>
+            </td>
         </tr>
 
         <tr>
             <th>出勤・退勤</th>
             <td>
-                <input
-                    type="text"
-                    name="clock_in"
-                    value="{{ old('clock_in', $attendance->clock_in ? \Carbon\Carbon::parse($attendance->clock_in)->format('H:i') : '') }}"
-                >
-            </td>
-            <td>〜</td>
-            <td>
-                <input
-                    type="text"
-                    name="clock_out"
-                    value="{{ old('clock_out', $attendance->clock_out ? \Carbon\Carbon::parse($attendance->clock_out)->format('H:i') : '') }}"
-                >
+                <div class="detail-table__time-range">
+                    <input
+                        class="detail-table__time-input"
+                        type="text"
+                        name="clock_in"
+                        value="{{ old('clock_in', $attendance->clock_in ? \Carbon\Carbon::parse($attendance->clock_in)->format('H:i') : '') }}"
+                    >
+                    <span>〜</span>
+                    <input
+                        class="detail-table__time-input"
+                        type="text"
+                        name="clock_out"
+                        value="{{ old('clock_out', $attendance->clock_out ? \Carbon\Carbon::parse($attendance->clock_out)->format('H:i') : '') }}"
+                    >
+                </div>
             </td>
         </tr>
 
@@ -134,19 +164,21 @@
             <th>休憩</th>
             <td>
                 <input type="hidden" name="breaks[0][id]" value="{{ $break1 ? $break1->id : '' }}">
-                <input
-                    type="text"
-                    name="breaks[0][start]"
-                    value="{{ old('breaks.0.start', $break1 && $break1->break_start ? \Carbon\Carbon::parse($break1->break_start)->format('H:i') : '') }}"
-                >
-            </td>
-            <td>〜</td>
-            <td>
-                <input
-                    type="text"
-                    name="breaks[0][end]"
-                    value="{{ old('breaks.0.end', $break1 && $break1->break_end ? \Carbon\Carbon::parse($break1->break_end)->format('H:i') : '') }}"
-                >
+                <div class="detail-table__time-range">
+                    <input
+                        class="detail-table__time-input"
+                        type="text"
+                        name="breaks[0][start]"
+                        value="{{ old('breaks.0.start', $break1 && $break1->break_start ? \Carbon\Carbon::parse($break1->break_start)->format('H:i') : '') }}"
+                    >
+                    <span>〜</span>
+                    <input
+                        class="detail-table__time-input"
+                        type="text"
+                        name="breaks[0][end]"
+                        value="{{ old('breaks.0.end', $break1 && $break1->break_end ? \Carbon\Carbon::parse($break1->break_end)->format('H:i') : '') }}"
+                    >
+                </div>
             </td>
         </tr>
 
@@ -154,26 +186,33 @@
             <th>休憩2</th>
             <td>
                 <input type="hidden" name="breaks[1][id]" value="{{ $break2 ? $break2->id : '' }}">
-                <input
-                    type="text"
-                    name="breaks[1][start]"
-                    value="{{ old('breaks.1.start', $break2 && $break2->break_start ? \Carbon\Carbon::parse($break2->break_start)->format('H:i') : '') }}"
-                >
-            </td>
-            <td>〜</td>
-            <td>
-                <input
-                    type="text"
-                    name="breaks[1][end]"
-                    value="{{ old('breaks.1.end', $break2 && $break2->break_end ? \Carbon\Carbon::parse($break2->break_end)->format('H:i') : '') }}"
-                >
+                <div class="detail-table__time-range">
+                    <input
+                        class="detail-table__time-input"
+                        type="text"
+                        name="breaks[1][start]"
+                        value="{{ old('breaks.1.start', $break2 && $break2->break_start ? \Carbon\Carbon::parse($break2->break_start)->format('H:i') : '') }}"
+                    >
+                    <span>〜</span>
+                    <input
+                        class="detail-table__time-input"
+                        type="text"
+                        name="breaks[1][end]"
+                        value="{{ old('breaks.1.end', $break2 && $break2->break_end ? \Carbon\Carbon::parse($break2->break_end)->format('H:i') : '') }}"
+                    >
+                </div>
             </td>
         </tr>
 
         <tr>
             <th>備考</th>
-            <td colspan="3">
-                <textarea name="reason">{{ old('reason', $attendance->remarks ?? '') }}</textarea>
+            <td>
+                <div class="detail-table__reason">
+                    <textarea
+                        class="detail-table__textarea"
+                        name="reason"
+                    >{{ old('reason', $attendance->remarks ?? '') }}</textarea>
+                </div>
             </td>
         </tr>
     @endif
@@ -187,12 +226,16 @@
     </div>
 @endif
 
-        @if ($isPendingCorrection)
-            <p style="color: red;">*承認待ちのため修正はできません。</p>
-        @else
-            <button type="submit">修正</button>
-            </form>
-        @endif
+@if ($isPendingCorrection)
+    <div class="detail__footer">
+        <p class="detail__pending-message">*承認待ちのため修正はできません。</p>
+    </div>
+@else
+    <div class="detail__footer">
+        <button class="detail__submit-button" type="submit">修正</button>
+    </div>
+</form>
+@endif
     </main>
 </body>
 </html>

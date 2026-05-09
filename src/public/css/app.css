@@ -311,3 +311,224 @@ body > header:not(.auth-header) nav a,
 body > header:not(.auth-header) nav button {
     margin-right: 0;
 }
+
+/* =========================
+   Attendance Detail Table
+========================= */
+
+.detail-table {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.detail-table th {
+    width: 180px;
+    color: #737373;
+    font-weight: bold;
+    text-align: center;
+}
+
+.detail-table td {
+    text-align: center;
+}
+
+.detail-table th,
+.detail-table td {
+    height: 70px;
+    padding: 0 24px;
+}
+
+.detail-table__date {
+    display: flex;
+    justify-content: center;
+    gap: 120px;
+    font-weight: bold;
+}
+
+.detail-table__time-range {
+    display: grid;
+    grid-template-columns: 180px 40px 180px;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+}
+
+.detail-table__time-input {
+    width: 180px;
+    height: 36px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.detail-table__textarea {
+    width: 300px;
+    min-height: 60px;
+    font-weight: bold;
+}
+
+.detail__submit-button {
+    display: block;
+    width: 120px;
+    height: 50px;
+    margin: 30px 0 0 auto;
+}
+
+.detail__footer {
+    width: 100%;
+    max-width: 900px;
+    margin: 30px auto 0;
+}
+
+.detail__submit-button {
+    display: block;
+    width: 120px;
+    height: 50px;
+    margin-left: auto;
+}
+
+/* =========================
+   Attendance Detail Footer Override
+========================= */
+
+.detail__footer {
+    width: 100%;
+    max-width: 900px;
+    margin: 30px auto 0;
+    text-align: right;
+}
+
+.detail__pending-message {
+    display: block;
+    width: 100%;
+    color: #ff0000;
+    font-size: 16px;
+    margin: 0;
+    text-align: right;
+}
+
+.detail__submit-button {
+    display: inline-block;
+    width: 120px;
+    height: 50px;
+}
+
+/* =========================
+   Attendance Detail Fine Tune
+========================= */
+
+.detail-table th {
+    text-align: left;
+    padding-left: 70px;
+}
+
+.detail-table__name {
+    display: grid;
+    grid-template-columns: 180px 40px 180px;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+}
+
+.detail-table__name span {
+    grid-column: 1;
+    text-align: center;
+}
+
+.detail-table__date {
+    display: grid;
+    grid-template-columns: 180px 40px 180px;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+}
+
+.detail-table__date span:first-child {
+    grid-column: 1;
+    text-align: center;
+}
+
+.detail-table__date span:last-child {
+    grid-column: 3;
+    text-align: center;
+}
+
+.detail-table__reason {
+    display: grid;
+    grid-template-columns: 180px 40px 180px;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+}
+
+.detail-table__reason span,
+.detail-table__reason textarea {
+    grid-column: 1 / 4;
+    justify-self: start;
+}
+
+.detail-table__textarea {
+    width: 300px;
+}
+
+/* =========================
+   Attendance Detail Vertical Align
+========================= */
+
+.detail-table__name,
+.detail-table__date,
+.detail-table__time-range,
+.detail-table__reason {
+    display: grid;
+    grid-template-columns: 180px 40px 180px;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+}
+
+.detail-table__name span {
+    grid-column: 1;
+    justify-self: center;
+}
+
+.detail-table__date span:first-child {
+    grid-column: 1;
+    justify-self: center;
+}
+
+.detail-table__date span:last-child {
+    grid-column: 3;
+    justify-self: center;
+}
+
+.detail-table__time-range span:first-child,
+.detail-table__time-range input:first-of-type {
+    grid-column: 1;
+    justify-self: center;
+}
+
+.detail-table__time-range span:nth-child(2) {
+    grid-column: 2;
+    justify-self: center;
+}
+
+.detail-table__time-range span:last-child,
+.detail-table__time-range input:last-of-type {
+    grid-column: 3;
+    justify-self: center;
+}
+
+.detail-table__reason span,
+.detail-table__reason textarea {
+    grid-column: 1;
+    justify-self: center;
+}
+
+/* =========================
+   Attendance Detail Label Align Override
+========================= */
+
+main:not(.auth) .detail-table th {
+    text-align: left;
+    padding-left: 70px;
+}
