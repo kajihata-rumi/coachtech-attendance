@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>勤怠一覧</title>
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 </head>
 <body>
     <header>
