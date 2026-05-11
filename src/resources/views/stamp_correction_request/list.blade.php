@@ -8,7 +8,7 @@
 </head>
 
 <body>
-    <header>
+    <header class="header">
         <a class="header__logo" href="/attendance">
     <img class="header__logo-img" src="{{ asset('images/coachtech-logo.png') }}" alt="COACHTECH">
 </a>
@@ -32,12 +32,23 @@
             $requests = $tab === 'approved' ? $approvedRequests : $pendingRequests;
         @endphp
 
-        <div>
-            <a href="{{ route('stamp_correction_request.list', ['tab' => 'pending']) }}">承認待ち</a>
-            <a href="{{ route('stamp_correction_request.list', ['tab' => 'approved']) }}">承認済み</a>
+        <div class="correction-request__tabs">
+            <a
+                class="correction-request__tab {{ request('tab', 'pending') === 'pending' ? 'is-active' : '' }}"
+                href="{{ url('/stamp_correction_request/list?tab=pending') }}"
+            >
+                承認待ち
+            </a>
+
+            <a
+                class="correction-request__tab {{ request('tab') === 'approved' ? 'is-active' : '' }}"
+                href="{{ url('/stamp_correction_request/list?tab=approved') }}"
+            >
+                承認済み
+            </a>
         </div>
 
-        <table border="1">
+        <table class="correction-request__table">
             <tr>
                 <th>状態</th>
                 <th>名前</th>
@@ -55,7 +66,7 @@
                     <td>{{ $request->reason }}</td>
                     <td>{{ \Carbon\Carbon::parse($request->created_at)->format('Y/m/d') }}</td>
                     <td>
-                        <a href="{{ route('attendance.show', ['attendance' => $request->attendance_id]) }}">
+                        <a class="table-detail-link" href="{{ route('attendance.show', ['attendance' => $request->attendance_id]) }}">
                             詳細
                         </a>
                     </td>

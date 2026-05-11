@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 </head>
 <body>
-    <header>
+    <header class="header">
         <a class="header__logo" href="/attendance">
     <img class="header__logo-img" src="{{ asset('images/coachtech-logo.png') }}" alt="COACHTECH">
 </a>
@@ -26,19 +26,26 @@
     <main>
         <h1>勤怠一覧</h1>
 
-        <div>
-            <a href="{{ route('attendance.list', ['month' => $targetMonth->copy()->subMonth()->format('Y-m')]) }}">
-                ← 前月
-            </a>
+        <div class="attendance-list__month-nav">
+    <a class="attendance-list__month-link" href="{{ route('attendance.list', ['month' => $targetMonth->copy()->subMonth()->format('Y-m')]) }}">
+        ← 前月
+    </a>
 
-            <strong>{{ $targetMonth->format('Y/m') }}</strong>
+    <div class="attendance-list__current-month">
+        <img
+        class="attendance-list__calendar-icon"
+        src="{{ asset('images/calendar-icon.png') }}"
+        alt="カレンダーアイコン"
+    >
+        <strong>{{ $targetMonth->format('Y/m') }}</strong>
+    </div>
 
-            <a href="{{ route('attendance.list', ['month' => $targetMonth->copy()->addMonth()->format('Y-m')]) }}">
-                翌月 →
-            </a>
-        </div>
+    <a class="attendance-list__month-link" href="{{ route('attendance.list', ['month' => $targetMonth->copy()->addMonth()->format('Y-m')]) }}">
+        翌月 →
+    </a>
+</div>
 
-        <table border="1">
+        <table class="correction-request__table">
             <thead>
                 <tr>
                     <th>日付</th>
@@ -82,7 +89,7 @@
                         <td>{{ $workMinutes > 0 ? sprintf('%d:%02d', floor($workMinutes / 60), $workMinutes % 60) : '' }}</td>
                         <td>
                             @if ($attendance)
-                                <a href="{{ route('attendance.show', $attendance->id) }}">詳細</a>
+                                <a class="table-detail-link" href="{{ route('attendance.show', $attendance->id) }}">詳細</a>
                             @endif
                         </td>
                     </tr>

@@ -89,7 +89,7 @@ Seederで初期データを登録しています。
     - password = `.password`
 
     - 'name' => `増田 一世`
-    - 'email' => `issei.m.n@coachtech.com`
+    - 'email' => `issei.m@coachtech.com`
     - password = `.password`
 
     - 'name' => `山本 敬吉`

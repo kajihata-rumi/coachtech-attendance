@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 </head>
 <body>
-    <header>
+    <header class="header">
         <a class="header__logo" href="/attendance">
     <img class="header__logo-img" src="{{ asset('images/coachtech-logo.png') }}" alt="COACHTECH">
 </a>
