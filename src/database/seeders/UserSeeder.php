@@ -65,5 +65,13 @@ class UserSeeder extends Seeder
             'role' => 'user',
             'email_verified_at' => now(),
         ]);
+
+        User::create([
+            'name' => '山田 花子',
+            'email' => 'hanako.y@coachtech.com',
+            'password' => Hash::make('password'),
+            'role' => 'user',
+            'email_verified_at' => now(),
+        ]);
     }
 }

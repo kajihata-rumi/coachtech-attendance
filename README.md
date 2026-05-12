@@ -10,6 +10,7 @@ git clone https://github.com/kajihata-rumi/coachtech-attendance.git
 cd coachtech-attendance
 docker-compose up -d --build
 ```
+
 ### Laravel環境構築
 
 ```bash
@@ -85,6 +86,7 @@ APP_URL=http://localhost
 ---
 
 ## テスト用アカウント
+
 Seederで初期データを登録しています。
 
 - 管理者
@@ -116,8 +118,22 @@ Seederで初期データを登録しています。
     - email => norio.n@coachtech.com
     - password = password
 
+
+### Seederデータについて
+
+山田 花子は、申請一覧画面の表示確認用データとして登録しています。
+ログイン確認用のテストアカウントではありません。
+
+### Seederの日付データについて
+
+UI仕様書ではサンプルとして2023年の日付が表示されていますが、
+本アプリでは実際の利用日を基準に勤怠登録・表示を行うため、
+Seederでは実行時点の年月を使用して勤怠データを作成しています。
+
 ---
+
 ## ER図
+
 以下はMermaid記法で記載しています。
 GitHub上ではER図として自動表示されます。
 
@@ -197,6 +213,7 @@ erDiagram
 - `break_correction_requests.break_time_id` は既存休憩を修正する時に使います。新しく休憩を追加する場合はNULLになります。
 
 ---
+
 ## 機能一覧
 
 - 一般ユーザー
