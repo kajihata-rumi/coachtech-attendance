@@ -78,7 +78,8 @@ APP_URL=http://localhost
 - ログイン = http://localhost/login
 - メール認証 = http://localhost/email/verify
 - 勤怠登録 = http://localhost/attendance
-- 勤怠一覧 = http://localhost/attendance
+- 勤怠一覧 = http://localhost/attendance/list
+- 申請一覧 = http://localhost/stamp_correction_request/list
 - 管理者ログイン = http://localhost/admin/login
 
 ---
