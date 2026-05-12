@@ -112,8 +112,8 @@ Seederで初期データを登録しています。
     - email => tomomi.a@coachtech.com
     - password = password
 
-    - 'name' => 中西 教夫
-    - 'email' => norio.n@coachtech.com
+    - name => 中西 教夫
+    - email => norio.n@coachtech.com
     - password = password
 
 ---

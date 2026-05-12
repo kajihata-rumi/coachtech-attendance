@@ -11,51 +11,65 @@ class AttendanceCorrectionRequestSeeder extends Seeder
 {
     public function run()
     {
-        $admin = User::where('role', 'admin')->first();
+        $admin = User::where('role', 'admin')->firstOrFail();
+        $reina = User::where('email', 'reina.n@coachtech.com')->firstOrFail();
 
-        $reina = User::where('email', 'reina.n@coachtech.com')->first();
-        $taro = User::where('email', 'taro.y@coachtech.com')->first();
-        $issei = User::where('email', 'issei.m@coachtech.com')->first();
+        $pendingDates = [
+            '2023-06-01',
+            '2023-06-02',
+            '2023-06-03',
+            '2023-06-04',
+            '2023-06-05',
+            '2023-06-06',
+            '2023-06-07',
+            '2023-06-08',
+            '2023-06-09',
+        ];
 
-        $reinaAttendance = Attendance::where('user_id', $reina->id)
-            ->where('work_date', '2023-06-01')
-            ->first();
+        foreach ($pendingDates as $date) {
+            $attendance = Attendance::firstOrCreate(
+                [
+                    'user_id' => $reina->id,
+                    'work_date' => $date,
+                ],
+                [
+                    'clock_in' => '09:00:00',
+                    'clock_out' => '18:00:00',
+                    'status' => '退勤済',
+                    'note' => null,
+                ]
+            );
 
-        $taroAttendance = Attendance::where('user_id', $taro->id)
-            ->where('work_date', '2023-06-02')
-            ->first();
+            AttendanceCorrectionRequest::create([
+                'attendance_id' => $attendance->id,
+                'user_id' => $reina->id,
+                'requested_clock_in' => '09:00:00',
+                'requested_clock_out' => '18:00:00',
+                'reason' => '遅延のため',
+                'status' => 'pending',
+                'approved_by' => null,
+                'approved_at' => null,
+            ]);
+        }
 
-        $isseiAttendance = Attendance::where('user_id', $issei->id)
-            ->where('work_date', '2023-06-05')
-            ->first();
+        $approvedAttendance = Attendance::firstOrCreate(
+            [
+                'user_id' => $reina->id,
+                'work_date' => '2023-06-10',
+            ],
+            [
+                'clock_in' => '09:00:00',
+                'clock_out' => '18:00:00',
+                'status' => '退勤済',
+                'note' => null,
+            ]
+        );
 
         AttendanceCorrectionRequest::create([
-            'attendance_id' => $reinaAttendance->id,
+            'attendance_id' => $approvedAttendance->id,
             'user_id' => $reina->id,
-            'requested_clock_in' => '09:00:00',
-            'requested_clock_out' => '18:00:00',
-            'reason' => '遅延のため',
-            'status' => 'pending',
-            'approved_by' => null,
-            'approved_at' => null,
-        ]);
-
-        AttendanceCorrectionRequest::create([
-            'attendance_id' => $taroAttendance->id,
-            'user_id' => $taro->id,
             'requested_clock_in' => '09:30:00',
             'requested_clock_out' => '18:30:00',
-            'reason' => '電車遅延のため',
-            'status' => 'pending',
-            'approved_by' => null,
-            'approved_at' => null,
-        ]);
-
-        AttendanceCorrectionRequest::create([
-            'attendance_id' => $isseiAttendance->id,
-            'user_id' => $issei->id,
-            'requested_clock_in' => '09:00:00',
-            'requested_clock_out' => '18:00:00',
             'reason' => '打刻修正のため',
             'status' => 'approved',
             'approved_by' => $admin->id,
