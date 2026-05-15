@@ -1,0 +1,101 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Models\User;
+use Carbon\Carbon;
+
+class AdminAttendanceController extends Controller
+{
+    public function index()
+    {
+        $targetDate = request('date')
+            ? Carbon::parse(request('date'))
+            : Carbon::today();
+
+        $users = User::where('role', 'user')
+            ->with([
+                'attendances' => function ($query) use ($targetDate) {
+                    $query->where('work_date', $targetDate->toDateString())
+                        ->with('breakTimes');
+                },
+            ])
+            ->get();
+
+        $attendanceRows = $users->map(function ($user) {
+            $attendance = $user->attendances->first();
+
+            if (!$attendance) {
+                return [
+                    'user' => $user,
+                    'attendance' => null,
+                    'clock_in' => '',
+                    'clock_out' => '',
+                    'break_time' => '',
+                    'total_time' => '',
+                ];
+            }
+
+            $breakMinutes = $this->calculateBreakMinutes($attendance);
+            $totalMinutes = $this->calculateTotalMinutes($attendance, $breakMinutes);
+
+            return [
+                'user' => $user,
+                'attendance' => $attendance,
+                'clock_in' => $this->formatTime($attendance->clock_in),
+                'clock_out' => $this->formatTime($attendance->clock_out),
+                'break_time' => $this->formatMinutes($breakMinutes),
+                'total_time' => $this->formatMinutes($totalMinutes),
+            ];
+        });
+
+        return view('admin.attendance.list', [
+            'targetDate' => $targetDate,
+            'previousDate' => $targetDate->copy()->subDay(),
+            'nextDate' => $targetDate->copy()->addDay(),
+            'attendanceRows' => $attendanceRows,
+        ]);
+    }
+
+    private function calculateBreakMinutes($attendance)
+    {
+        return $attendance->breakTimes->sum(function ($breakTime) {
+            if (!$breakTime->break_start || !$breakTime->break_end) {
+                return 0;
+            }
+
+            return Carbon::parse($breakTime->break_start)
+                ->diffInMinutes(Carbon::parse($breakTime->break_end));
+        });
+    }
+
+    private function calculateTotalMinutes($attendance, $breakMinutes)
+    {
+        if (!$attendance->clock_in || !$attendance->clock_out) {
+            return 0;
+        }
+
+        $workMinutes = Carbon::parse($attendance->clock_in)
+            ->diffInMinutes(Carbon::parse($attendance->clock_out));
+
+        return max($workMinutes - $breakMinutes, 0);
+    }
+
+    private function formatTime($time)
+    {
+        return $time ? Carbon::parse($time)->format('H:i') : '';
+    }
+
+    private function formatMinutes($minutes)
+    {
+        if ($minutes <= 0) {
+            return '';
+        }
+
+        $hours = floor($minutes / 60);
+        $remainingMinutes = $minutes % 60;
+
+        return $hours . ':' . str_pad($remainingMinutes, 2, '0', STR_PAD_LEFT);
+    }
+}

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\Auth\LoginController;
+use App\Http\Controllers\Admin\AdminAttendanceController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AttendanceController;
 
@@ -46,9 +47,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     ->name('stamp_correction_request.list');
 });
 
-    Route::get('/admin/attendance/list', function () {
-        return view('tmp-page', ['title' => '管理者：勤怠一覧画面']);
-    });
+    Route::get('/admin/attendance/list', [AdminAttendanceController::class, 'index'])
+    ->name('admin.attendance.list');
 
     Route::get('/admin/staff/list', function () {
         return view('tmp-page', ['title' => '管理者：スタッフ一覧画面']);
