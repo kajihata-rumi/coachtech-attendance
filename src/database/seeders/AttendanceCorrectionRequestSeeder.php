@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Attendance;
 use App\Models\AttendanceCorrectionRequest;
 use App\Models\User;
+use Carbon\CarbonPeriod;
 use Illuminate\Database\Seeder;
 
 class AttendanceCorrectionRequestSeeder extends Seeder
@@ -14,23 +15,22 @@ class AttendanceCorrectionRequestSeeder extends Seeder
         $admin = User::where('role', 'admin')->firstOrFail();
         $reina = User::where('email', 'reina.n@coachtech.com')->firstOrFail();
 
-        $pendingDates = [
-            '2023-06-01',
-            '2023-06-02',
-            '2023-06-03',
-            '2023-06-04',
-            '2023-06-05',
-            '2023-06-06',
-            '2023-06-07',
-            '2023-06-08',
-            '2023-06-09',
-        ];
+        $workDates = collect(CarbonPeriod::create(
+            now()->startOfMonth(),
+            now()->endOfMonth()
+        ))
+            ->reject(fn ($date) => $date->isWeekend())
+            ->take(10)
+            ->values();
+
+        $pendingDates = $workDates->take(9);
+        $approvedDate = $workDates->last();
 
         foreach ($pendingDates as $date) {
             $attendance = Attendance::firstOrCreate(
                 [
                     'user_id' => $reina->id,
-                    'work_date' => $date,
+                    'work_date' => $date->format('Y-m-d'),
                 ],
                 [
                     'clock_in' => '09:00:00',
@@ -55,7 +55,7 @@ class AttendanceCorrectionRequestSeeder extends Seeder
         $approvedAttendance = Attendance::firstOrCreate(
             [
                 'user_id' => $reina->id,
-                'work_date' => '2023-06-10',
+                'work_date' => $approvedDate->format('Y-m-d'),
             ],
             [
                 'clock_in' => '09:00:00',

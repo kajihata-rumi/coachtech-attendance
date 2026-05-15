@@ -13,7 +13,10 @@ class AttendanceSeeder extends Seeder
     {
         $users = User::where('role', 'user')->get();
 
-        $period = CarbonPeriod::create('2023-06-01', '2023-06-30');
+        $period = CarbonPeriod::create(
+            now()->startOfMonth(),
+            now()->endOfMonth()
+        );
 
         foreach ($users as $user) {
             foreach ($period as $date) {
