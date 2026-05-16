@@ -50,6 +50,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/admin/attendance/list', [AdminAttendanceController::class, 'index'])
     ->name('admin.attendance.list');
 
+Route::get('/admin/attendance/{attendance}', [AdminAttendanceController::class, 'show'])
+    ->name('admin.attendance.show');
+
     Route::get('/admin/staff/list', function () {
         return view('tmp-page', ['title' => '管理者：スタッフ一覧画面']);
     });

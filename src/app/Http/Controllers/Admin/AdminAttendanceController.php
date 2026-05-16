@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Attendance;
 use App\Models\User;
 use Carbon\Carbon;
 
@@ -58,6 +59,16 @@ class AdminAttendanceController extends Controller
         ]);
     }
 
+
+    public function show(Attendance $attendance)
+{
+    $attendance->load(['user', 'breakTimes']);
+
+    return view('admin.attendance.detail', [
+        'attendance' => $attendance,
+        'user' => $attendance->user,
+    ]);
+}
     private function calculateBreakMinutes($attendance)
     {
         return $attendance->breakTimes->sum(function ($breakTime) {
