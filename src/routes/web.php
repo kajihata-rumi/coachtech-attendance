@@ -53,6 +53,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::get('/admin/attendance/{attendance}', [AdminAttendanceController::class, 'show'])
     ->name('admin.attendance.show');
 
+Route::patch('/admin/attendance/{attendance}', [AdminAttendanceController::class, 'update'])
+    ->name('admin.attendance.update');
+
     Route::get('/admin/staff/list', function () {
         return view('tmp-page', ['title' => '管理者：スタッフ一覧画面']);
     });

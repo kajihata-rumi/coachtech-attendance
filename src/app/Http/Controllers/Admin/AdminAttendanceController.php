@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Attendance;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class AdminAttendanceController extends Controller
 {
@@ -81,6 +82,44 @@ class AdminAttendanceController extends Controller
         });
     }
 
+public function update(Request $request, Attendance $attendance)
+{
+    $attendance->update([
+        'clock_in' => $request->input('clock_in'),
+        'clock_out' => $request->input('clock_out'),
+        'note' => $request->input('note'),
+    ]);
+
+    $breakInputs = $request->input('breaks', []);
+    $breakTimes = $attendance->breakTimes()->orderBy('id')->get();
+
+    foreach ([0, 1] as $index) {
+        $breakInput = $breakInputs[$index] ?? [];
+
+        $start = $breakInput['start'] ?? null;
+        $end = $breakInput['end'] ?? null;
+
+        $breakTime = $breakTimes->get($index);
+
+        if ($start || $end) {
+            if ($breakTime) {
+                $breakTime->update([
+                    'break_start' => $start,
+                    'break_end' => $end,
+                ]);
+            } else {
+                $attendance->breakTimes()->create([
+                    'break_start' => $start,
+                    'break_end' => $end,
+                ]);
+            }
+        } elseif ($breakTime) {
+            $breakTime->delete();
+        }
+    }
+
+    return redirect()->route('admin.attendance.show', $attendance);
+}
     private function calculateTotalMinutes($attendance, $breakMinutes)
     {
         if (!$attendance->clock_in || !$attendance->clock_out) {

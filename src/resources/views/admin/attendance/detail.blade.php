@@ -31,7 +31,9 @@
             $break2 = $attendance->breakTimes->get(1);
         @endphp
 
-        <form>
+        <form action="{{ route('admin.attendance.update', $attendance) }}" method="POST">
+    @csrf
+    @method('PATCH')
             <table class="detail-table">
                 <tr>
                     <th>名前</th>
@@ -129,7 +131,7 @@
             </table>
 
             <div class="detail__footer">
-                <button class="detail__submit-button" type="button">修正</button>
+                <button class="detail__submit-button" type="submit">修正</button>
             </div>
         </form>
     </main>
