@@ -211,7 +211,7 @@
                     <textarea
                         class="detail-table__textarea"
                         name="reason"
-                    >{{ old('reason', $attendance->remarks ?? '') }}</textarea>
+                    >{{ old('reason', $attendance->note ?? '') }}</textarea>
                 </div>
             </td>
         </tr>

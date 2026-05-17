@@ -130,6 +130,14 @@
                 </tr>
             </table>
 
+            @if ($errors->any())
+                <div class="detail__errors">
+                    @foreach ($errors->all() as $error)
+                        <p class="error-message">{{ $error }}</p>
+                    @endforeach
+                </div>
+            @endif
+
             <div class="detail__footer">
                 <button class="detail__submit-button" type="submit">修正</button>
             </div>

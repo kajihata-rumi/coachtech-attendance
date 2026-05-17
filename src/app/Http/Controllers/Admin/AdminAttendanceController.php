@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AdminAttendanceUpdateRequest;
 use App\Models\Attendance;
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
+
 
 class AdminAttendanceController extends Controller
 {
@@ -82,7 +83,7 @@ class AdminAttendanceController extends Controller
         });
     }
 
-public function update(Request $request, Attendance $attendance)
+public function update(AdminAttendanceUpdateRequest $request, Attendance $attendance)
 {
     $attendance->update([
         'clock_in' => $request->input('clock_in'),

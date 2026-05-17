@@ -234,7 +234,6 @@ main:not(.auth) .error,
 main:not(.auth) .error-message {
     color: #ff0000;
     font-size: 14px;
-    font-weight: bold;
     margin-top: 8px;
 }
 
@@ -801,4 +800,28 @@ table.correction-request__table th:nth-child(2),
 table.correction-request__table td:nth-child(2) {
     text-align: left;
     padding-left: 32px;
+}
+
+.error-message {
+    color: #ff0000;
+    font-size: 14px;
+    margin-top: 8px;
+}
+
+.detail-table th {
+    width: 180px;
+    min-width: 180px;
+    white-space: nowrap;
+}
+
+.detail__errors {
+    width: 850px;
+    margin: 16px auto 0;
+}
+
+.detail__errors .error-message {
+    color: #ff0000;
+    font-size: 14px;
+    margin: 0 0 8px;
+    text-align: left;
 }
