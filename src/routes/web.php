@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\AdminAttendanceController;
+use App\Http\Controllers\AdminStaffController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AttendanceController;
 
@@ -56,9 +57,11 @@ Route::get('/admin/attendance/{attendance}', [AdminAttendanceController::class, 
 Route::patch('/admin/attendance/{attendance}', [AdminAttendanceController::class, 'update'])
     ->name('admin.attendance.update');
 
-    Route::get('/admin/staff/list', function () {
-        return view('tmp-page', ['title' => '管理者：スタッフ一覧画面']);
-    });
+    Route::get('/admin/staff/list', [AdminStaffController::class, 'index'])
+    ->name('admin.staff.list');
+
+    Route::get('/admin/attendance/staff/{id}', [AdminStaffController::class, 'attendance'])
+    ->name('admin.attendance.staff');
 
     Route::get('/admin/stamp_correction_request/list', function () {
         return view('tmp-page', ['title' => '管理者：申請一覧画面']);

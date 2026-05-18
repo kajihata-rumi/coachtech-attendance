@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
         ]);
 
         User::create([
-            'name' => '西 伶奈',
+            'name' => '西 玲奈',
             'email' => 'reina.n@coachtech.com',
             'password' => Hash::make('password'),
             'role' => 'user',
