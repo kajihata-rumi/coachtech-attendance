@@ -3,23 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <title>スタッフ別勤怠一覧</title>
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 </head>
-<body>
-    <h1>{{ $staff->name }}さんの勤怠</h1>
 
-    <div>
-        <a href="{{ route('admin.attendance.staff', ['id' => $staff->id, 'month' => $currentMonth->copy()->subMonth()->format('Y-m')]) }}">
-            前月
+    <header class="header">
+        <a class="header__logo" href="/admin/attendance/list">
+            <img class="header__logo-img" src="{{ asset('images/coachtech-logo.png') }}" alt="COACHTECH">
         </a>
 
-        <span>{{ $currentMonth->format('Y/m') }}</span>
+        <nav>
+            <a href="/admin/attendance/list">勤怠一覧</a>
+            <a href="/admin/staff/list">スタッフ一覧</a>
+            <a href="/admin/stamp_correction_request/list">申請一覧</a>
 
-        <a href="{{ route('admin.attendance.staff', ['id' => $staff->id, 'month' => $currentMonth->copy()->addMonth()->format('Y-m')]) }}">
-            翌月
-        </a>
-    </div>
+            <form action="{{ route('admin.logout') }}" method="POST" style="display:inline;">
+                @csrf
+                <button type="submit">ログアウト</button>
+            </form>
+        </nav>
+    </header>
 
-    <table border="1">
+<main class="admin-staff-attendance">
+    <div class="admin-staff-attendance__inner">
+        <h1 class="admin-staff-attendance__title">
+            {{ $staff->name }}さんの勤怠
+        </h1>
+
+        <div class="admin-staff-attendance__month-nav">
+            <a href="{{ route('admin.attendance.staff', ['id' => $staff->id, 'month' => $currentMonth->copy()->subMonth()->format('Y-m')]) }}">
+                ← 前月
+            </a>
+
+            <div class="admin-staff-attendance__month">
+                <img
+                    class="admin-staff-attendance__calendar-icon"
+                    src="{{ asset('images/calendar-icon.png') }}"
+                    alt="カレンダーアイコン"
+                >
+                <strong>{{ $currentMonth->format('Y/m') }}</strong>
+            </div>
+
+            <a href="{{ route('admin.attendance.staff', ['id' => $staff->id, 'month' => $currentMonth->copy()->addMonth()->format('Y-m')]) }}">
+                翌月 →
+            </a>
+        </div>
+
+<table class="admin-staff-attendance__table">
+    <thead>
         <tr>
             <th>日付</th>
             <th>出勤</th>
@@ -28,7 +58,8 @@
             <th>合計</th>
             <th>詳細</th>
         </tr>
-
+    </thead>
+        <tbody>
             @foreach ($dates as $date)
                 @php
                     $dateKey = $date->format('Y-m-d');
@@ -93,11 +124,15 @@
                     </td>
                 </tr>
             @endforeach
+        </tbody>
     </table>
-    <div>
-        <a href="{{ route('admin.attendance.staff.csv', ['id' => $staff->id, 'month' => $currentMonth->format('Y-m')]) }}">
-            CSV出力
-        </a>
+    <div class="admin-staff-attendance__csv">
+    <a
+        class="admin-staff-attendance__csv-button"
+        href="{{ route('admin.attendance.staff.csv', ['id' => $staff->id, 'month' => $currentMonth->format('Y-m')]) }}"
+    >
+        CSV出力
+    </a>
     </div>
-</body>
+</main>
 </html>

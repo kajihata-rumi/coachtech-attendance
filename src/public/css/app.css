@@ -825,3 +825,132 @@ table.correction-request__table td:nth-child(2) {
     margin: 0 0 8px;
     text-align: left;
 }
+
+.admin-staff-attendance {
+    min-height: calc(100vh - 80px);
+    background-color: #f0eff2;
+    padding: 70px 0 80px;
+}
+
+.admin-staff-attendance__inner {
+    width: min(900px, calc(100% - 48px));
+    margin: 0 auto;
+}
+
+.admin-staff-attendance__title {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 35px;
+    padding-left: 18px;
+    border-left: 6px solid #000;
+}
+
+.admin-staff-attendance__month-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 45px;
+    background-color: #fff;
+    border-radius: 6px;
+    padding: 0 24px;
+    margin-bottom: 45px;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.admin-staff-attendance__month-nav a {
+    color: #737373;
+    text-decoration: none;
+}
+
+.admin-staff-attendance__month-nav span {
+    font-size: 22px;
+    color: #000;
+}
+
+.admin-staff-attendance__table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.admin-staff-attendance__table th,
+.admin-staff-attendance__table td {
+    height: 38px;
+    border-bottom: 1px solid #e0e0e0;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.admin-staff-attendance__table th {
+    color: #737373;
+}
+
+.admin-staff-attendance__table td {
+    color: #000;
+}
+
+.admin-staff-attendance__table a {
+    color: #000;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.admin-staff-attendance__csv {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 45px;
+}
+
+.admin-staff-attendance__csv a {
+    display: inline-block;
+    width: 120px;
+    height: 40px;
+    line-height: 40px;
+    background-color: #000;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.admin-staff-attendance__month {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 22px;
+    color: #000;
+}
+
+.admin-staff-attendance__calendar-icon {
+    width: 30px;
+    height: 30px;
+}
+
+.admin-staff-attendance__csv {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 45px;
+}
+
+.admin-staff-attendance__csv-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 120px;
+    height: 40px;
+    background-color: #000;
+    color: #fff;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.admin-staff-attendance__csv-button:hover {
+    color: #fff;
+    text-decoration: none;
+}
