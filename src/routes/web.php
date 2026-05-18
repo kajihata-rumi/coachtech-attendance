@@ -63,6 +63,9 @@ Route::patch('/admin/attendance/{attendance}', [AdminAttendanceController::class
     Route::get('/admin/attendance/staff/{id}', [AdminStaffController::class, 'attendance'])
     ->name('admin.attendance.staff');
 
+    Route::get('/admin/attendance/staff/{id}/csv', [AdminStaffController::class, 'exportCsv'])
+    ->name('admin.attendance.staff.csv');
+
     Route::get('/admin/stamp_correction_request/list', function () {
         return view('tmp-page', ['title' => '管理者：申請一覧画面']);
     });

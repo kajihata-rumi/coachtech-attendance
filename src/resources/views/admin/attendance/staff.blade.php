@@ -94,5 +94,10 @@
                 </tr>
             @endforeach
     </table>
+    <div>
+        <a href="{{ route('admin.attendance.staff.csv', ['id' => $staff->id, 'month' => $currentMonth->format('Y-m')]) }}">
+            CSV出力
+        </a>
+    </div>
 </body>
 </html>
