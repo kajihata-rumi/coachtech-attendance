@@ -9,20 +9,27 @@
 
 <body>
     <header class="header">
-        <a class="header__logo" href="/attendance">
-    <img class="header__logo-img" src="{{ asset('images/coachtech-logo.png') }}" alt="COACHTECH">
-</a>
-        <nav>
+    <a class="header__logo" href="{{ $isAdmin ? route('admin.attendance.list') : route('attendance.index') }}">
+        <img class="header__logo-img" src="{{ asset('images/coachtech-logo.png') }}" alt="COACHTECH">
+    </a>
+
+    <nav>
+        @if ($isAdmin)
+            <a href="{{ route('admin.attendance.list') }}">勤怠一覧</a>
+            <a href="{{ route('admin.staff.list') }}">スタッフ一覧</a>
+            <a href="{{ route('stamp_correction_request.list') }}">申請一覧</a>
+        @else
             <a href="{{ route('attendance.index') }}">勤怠</a>
             <a href="{{ route('attendance.list') }}">勤怠一覧</a>
             <a href="{{ route('stamp_correction_request.list') }}">申請</a>
+        @endif
 
-            <form action="{{ route('logout') }}" method="POST" style="display:inline;">
-                @csrf
-                <button type="submit">ログアウト</button>
-            </form>
-        </nav>
-    </header>
+        <form action="{{ route('logout') }}" method="POST" style="display:inline;">
+            @csrf
+            <button type="submit">ログアウト</button>
+        </form>
+    </nav>
+</header>
 
     <main>
         <h1>申請一覧</h1>
@@ -66,9 +73,15 @@
                     <td>{{ $request->reason }}</td>
                     <td>{{ \Carbon\Carbon::parse($request->created_at)->format('Y/m/d') }}</td>
                     <td>
-                        <a class="table-detail-link" href="{{ route('attendance.show', ['attendance' => $request->attendance_id]) }}">
-                            詳細
-                        </a>
+                        @if (auth()->user()->role === 'admin')
+                            <a class="table-detail-link" href="/stamp_correction_request/approve/{{ $request->id }}">
+                                詳細
+                            </a>
+                        @else
+                            <a class="table-detail-link" href="{{ route('attendance.show', ['attendance' => $request->attendance_id]) }}">
+                                詳細
+                            </a>
+                        @endif
                     </td>
                 </tr>
             @endforeach

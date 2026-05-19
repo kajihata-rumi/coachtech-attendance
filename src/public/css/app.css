@@ -394,6 +394,7 @@ main:not(.auth) .error-message {
 
 .detail-table__textarea {
     width: 300px;
+    margin: 0 30px 0;
 }
 
 /* =========================
@@ -953,4 +954,19 @@ table.correction-request__table td:nth-child(2) {
 .admin-staff-attendance__csv-button:hover {
     color: #fff;
     text-decoration: none;
+}
+
+.approval-button-area {
+    width: 830px;
+    margin: 40px 70px 0;
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* =================================
+   Approval Detail Table
+================================= */
+table.approval-detail-table th {
+    text-align: left;
+    padding-left: 70px;
 }

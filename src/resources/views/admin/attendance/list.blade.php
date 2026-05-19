@@ -7,21 +7,21 @@
 </head>
 <body>
     <header class="header">
-        <a class="header__logo" href="/admin/attendance/list">
-            <img class="header__logo-img" src="{{ asset('images/coachtech-logo.png') }}" alt="COACHTECH">
-        </a>
+    <a class="header__logo" href="{{ route('admin.attendance.list') }}">
+        <img class="header__logo-img" src="{{ asset('images/coachtech-logo.png') }}" alt="COACHTECH">
+    </a>
 
-        <nav>
-            <a href="/admin/attendance/list">勤怠一覧</a>
-            <a href="/admin/staff/list">スタッフ一覧</a>
-            <a href="/admin/stamp_correction_request/list">申請一覧</a>
+    <nav>
+    <a href="{{ route('admin.attendance.list') }}">勤怠一覧</a>
+    <a href="{{ route('admin.staff.list') }}">スタッフ一覧</a>
+    <a href="{{ route('stamp_correction_request.list') }}">申請一覧</a>
 
-            <form action="{{ route('admin.logout') }}" method="POST" style="display:inline;">
-                @csrf
-                <button type="submit">ログアウト</button>
-            </form>
-        </nav>
-    </header>
+    <form action="{{ route('logout') }}" method="POST" style="display:inline;">
+        @csrf
+        <button type="submit">ログアウト</button>
+    </form>
+</nav>
+</header>
 
     <main>
         <h1>{{ $targetDate->format('Y年n月j日') }}の勤怠</h1>

@@ -46,6 +46,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/stamp_correction_request/list', [AttendanceController::class, 'correctionRequestList'])
     ->name('stamp_correction_request.list');
+
+    Route::get('/stamp_correction_request/approve/{attendance_correct_request_id}', [AttendanceController::class, 'approve'])
+    ->name('stamp_correction_request.approve');
 });
 
     Route::get('/admin/attendance/list', [AdminAttendanceController::class, 'index'])
@@ -65,8 +68,3 @@ Route::patch('/admin/attendance/{attendance}', [AdminAttendanceController::class
 
     Route::get('/admin/attendance/staff/{id}/csv', [AdminStaffController::class, 'exportCsv'])
     ->name('admin.attendance.staff.csv');
-
-    Route::get('/admin/stamp_correction_request/list', function () {
-        return view('tmp-page', ['title' => '管理者：申請一覧画面']);
-    });
-

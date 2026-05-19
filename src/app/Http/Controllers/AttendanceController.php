@@ -208,35 +208,68 @@ public function storeCorrection(AttendanceCorrectionStoreRequest $request, Atten
 }
 public function correctionRequestList()
 {
-    $userId = auth()->id();
+    $user = auth()->user();
+    $isAdmin = $user->role === 'admin';
 
-    $pendingRequests = DB::table('attendance_correction_requests')
+    $pendingRequestsQuery = DB::table('attendance_correction_requests')
         ->join('attendances', 'attendance_correction_requests.attendance_id', '=', 'attendances.id')
         ->join('users', 'attendance_correction_requests.user_id', '=', 'users.id')
-        ->where('attendance_correction_requests.user_id', $userId)
         ->where('attendance_correction_requests.status', 'pending')
         ->select(
             'attendance_correction_requests.*',
             'attendances.work_date as attendance_date',
             'users.name as user_name'
-        )
+        );
+
+    if (! $isAdmin) {
+        $pendingRequestsQuery->where('attendance_correction_requests.user_id', $user->id);
+    }
+
+    $pendingRequests = $pendingRequestsQuery
         ->orderBy('attendance_correction_requests.created_at', 'desc')
         ->get();
 
-    $approvedRequests = DB::table('attendance_correction_requests')
+    $approvedRequestsQuery = DB::table('attendance_correction_requests')
         ->join('attendances', 'attendance_correction_requests.attendance_id', '=', 'attendances.id')
         ->join('users', 'attendance_correction_requests.user_id', '=', 'users.id')
-        ->where('attendance_correction_requests.user_id', $userId)
         ->where('attendance_correction_requests.status', 'approved')
         ->select(
             'attendance_correction_requests.*',
             'attendances.work_date as attendance_date',
             'users.name as user_name'
-        )
+        );
+
+    if (! $isAdmin) {
+        $approvedRequestsQuery->where('attendance_correction_requests.user_id', $user->id);
+    }
+
+    $approvedRequests = $approvedRequestsQuery
         ->orderBy('attendance_correction_requests.created_at', 'desc')
         ->get();
 
-    return view('stamp_correction_request.list', compact('pendingRequests', 'approvedRequests'));
+    return view('stamp_correction_request.list', compact(
+        'pendingRequests',
+        'approvedRequests',
+        'isAdmin'
+    ));
+}
+
+public function approve($attendance_correct_request_id)
+{
+    $correctionRequest = DB::table('attendance_correction_requests')
+        ->join('attendances', 'attendance_correction_requests.attendance_id', '=', 'attendances.id')
+        ->join('users', 'attendance_correction_requests.user_id', '=', 'users.id')
+        ->where('attendance_correction_requests.id', $attendance_correct_request_id)
+        ->select(
+            'attendance_correction_requests.*',
+            'attendances.work_date as attendance_date',
+            'users.name as user_name'
+        )
+        ->first();
+
+    abort_if(!$correctionRequest, 404);
+
+    return view('stamp_correction_request.approve', compact('correctionRequest'));
 }
     private function getTodayAttendance()
     {
