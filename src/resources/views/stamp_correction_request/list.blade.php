@@ -24,7 +24,11 @@
             <a href="{{ route('stamp_correction_request.list') }}">申請</a>
         @endif
 
-        <form action="{{ route('logout') }}" method="POST" style="display:inline;">
+        <form
+            action="{{ auth()->check() && auth()->user()->role === 'admin' ? route('admin.logout') : route('logout') }}"
+            method="POST"
+            style="display:inline;"
+        >
             @csrf
             <button type="submit">ログアウト</button>
         </form>
