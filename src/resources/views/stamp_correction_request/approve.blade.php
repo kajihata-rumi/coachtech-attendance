@@ -10,12 +10,10 @@
     <a class="header__logo" href="{{ route('admin.attendance.list') }}">
         <img class="header__logo-img" src="{{ asset('images/coachtech-logo.png') }}" alt="COACHTECH">
     </a>
-
     <nav>
         <a href="{{ route('admin.attendance.list') }}">勤怠一覧</a>
         <a href="{{ route('admin.staff.list') }}">スタッフ一覧</a>
         <a href="{{ route('stamp_correction_request.list') }}">申請一覧</a>
-
         <form action="{{ route('logout') }}" method="POST" style="display:inline;">
             @csrf
             <button type="submit">ログアウト</button>
@@ -35,7 +33,6 @@
             </div>
         </td>
     </tr>
-
     <tr>
         <th>日付</th>
         <td>
@@ -45,7 +42,6 @@
             </div>
         </td>
     </tr>
-
     <tr>
         <th>出勤・退勤</th>
         <td>
@@ -93,7 +89,15 @@
             @if ($correctionRequest->status === 'approved')
                 <button class="approval-button approved" disabled>承認済み</button>
             @else
-                <button class="approval-button">承認</button>
+                <form
+                    action="{{ route('stamp_correction_request.approve.update', $correctionRequest->id) }}"
+                    method="POST"
+                >
+                    @csrf
+                    @method('PATCH')
+
+                    <button type="submit" class="approval-button">承認</button>
+                </form>
             @endif
         </div>
     </main>

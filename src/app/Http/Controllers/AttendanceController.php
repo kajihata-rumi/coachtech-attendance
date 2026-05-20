@@ -271,6 +271,73 @@ public function approve($attendance_correct_request_id)
 
     return view('stamp_correction_request.approve', compact('correctionRequest'));
 }
+
+public function approveUpdate($attendance_correct_request_id)
+{
+    DB::transaction(function () use ($attendance_correct_request_id) {
+        $correctionRequest = DB::table('attendance_correction_requests')
+            ->where('id', $attendance_correct_request_id)
+            ->first();
+
+        abort_if(!$correctionRequest, 404);
+
+        if ($correctionRequest->status === 'approved') {
+            return;
+        }
+
+        DB::table('attendances')
+            ->where('id', $correctionRequest->attendance_id)
+            ->update([
+                'clock_in' => $correctionRequest->requested_clock_in,
+                'clock_out' => $correctionRequest->requested_clock_out,
+                'note' => $correctionRequest->reason,
+                'updated_at' => now(),
+            ]);
+
+        $breakCorrectionRequests = DB::table('break_correction_requests')
+            ->where('attendance_correction_request_id', $correctionRequest->id)
+            ->get();
+
+        foreach ($breakCorrectionRequests as $breakCorrectionRequest) {
+            if ($breakCorrectionRequest->break_time_id) {
+                DB::table('break_times')
+                    ->where('id', $breakCorrectionRequest->break_time_id)
+                    ->update([
+                        'break_start' => $breakCorrectionRequest->requested_break_start,
+                        'break_end' => $breakCorrectionRequest->requested_break_end,
+                        'updated_at' => now(),
+                    ]);
+
+                continue;
+            }
+
+            if (
+                $breakCorrectionRequest->requested_break_start ||
+                $breakCorrectionRequest->requested_break_end
+            ) {
+                DB::table('break_times')
+                    ->insert([
+                        'attendance_id' => $correctionRequest->attendance_id,
+                        'break_start' => $breakCorrectionRequest->requested_break_start,
+                        'break_end' => $breakCorrectionRequest->requested_break_end,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+            }
+        }
+
+        DB::table('attendance_correction_requests')
+            ->where('id', $attendance_correct_request_id)
+            ->update([
+                'status' => 'approved',
+                'approved_at' => now(),
+                'updated_at' => now(),
+            ]);
+    });
+
+    return redirect()
+        ->route('stamp_correction_request.list', ['tab' => 'approved']);
+}
     private function getTodayAttendance()
     {
         $today = Carbon::today();
