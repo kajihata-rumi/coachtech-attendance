@@ -1,49 +1,30 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <title>勤怠一覧</title>
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-</head>
-<body>
-    <header class="header">
-        <a class="header__logo" href="/attendance">
-    <img class="header__logo-img" src="{{ asset('images/coachtech-logo.png') }}" alt="COACHTECH">
-</a>
+@extends('layouts.user')
 
-        <nav>
-            <a href="/attendance">勤怠</a>
-            <a href="/attendance/list">勤怠一覧</a>
-            <a href="/stamp_correction_request/list">申請</a>
+@section('title', '勤怠一覧')
 
-            <form action="/logout" method="POST" style="display:inline;">
-                @csrf
-                <button type="submit">ログアウト</button>
-            </form>
-        </nav>
-    </header>
+@section('content')
 
     <main>
         <h1>勤怠一覧</h1>
 
         <div class="attendance-list__month-nav">
-    <a class="attendance-list__month-link" href="{{ route('attendance.list', ['month' => $targetMonth->copy()->subMonth()->format('Y-m')]) }}">
-        ← 前月
-    </a>
+            <a class="attendance-list__month-link" href="{{ route('attendance.list', ['month' => $targetMonth->copy()->subMonth()->format('Y-m')]) }}">
+                ← 前月
+            </a>
 
-    <div class="attendance-list__current-month">
-        <img
-        class="attendance-list__calendar-icon"
-        src="{{ asset('images/calendar-icon.png') }}"
-        alt="カレンダーアイコン"
-    >
-        <strong>{{ $targetMonth->format('Y/m') }}</strong>
-    </div>
+            <div class="attendance-list__current-month">
+                <img
+                class="attendance-list__calendar-icon"
+                src="{{ asset('images/calendar-icon.png') }}"
+                alt="カレンダーアイコン"
+            >
+                <strong>{{ $targetMonth->format('Y/m') }}</strong>
+            </div>
 
-    <a class="attendance-list__month-link" href="{{ route('attendance.list', ['month' => $targetMonth->copy()->addMonth()->format('Y-m')]) }}">
-        翌月 →
-    </a>
-</div>
+            <a class="attendance-list__month-link" href="{{ route('attendance.list', ['month' => $targetMonth->copy()->addMonth()->format('Y-m')]) }}">
+                翌月 →
+            </a>
+        </div>
 
         <table class="correction-request__table">
             <thead>
@@ -97,5 +78,4 @@
             </tbody>
         </table>
     </main>
-</body>
-</html>
+@endsection
