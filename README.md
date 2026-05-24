@@ -1,6 +1,7 @@
 # 勤怠管理アプリ
 
 ---
+
 ## 環境構築
 
 ### Dockerビルド
@@ -20,10 +21,12 @@ cp .env.example .env
 ```
 
 `.env`を設定後、以下を実行してください。
+
 ```bash
 php artisan key:generate
 php artisan migrate --seed
 ```
+
 ---
 
 ## .env設定
@@ -50,6 +53,7 @@ MAIL_FROM_NAME="${APP_NAME}"
 
 APP_URL=http://localhost
 ```
+
 ---
 
 ## 使用技術
@@ -90,34 +94,33 @@ APP_URL=http://localhost
 Seederで初期データを登録しています。
 
 - 管理者
-    - email = admin@example.com
-    - password = password
+  - email = admin@example.com
+  - password = password
 
 - 一般ユーザー（スタッフ）
-    - name => 西 伶奈
-    - email => reina.n@coachtech.com
-    - password = password
+  - name => 西 玲奈
+  - email => reina.n@coachtech.com
+  - password = password
 
-    - name => 山田 太郎
-    - email => taro.y@coachtech.com
-    - password = password
+  - name => 山田 太郎
+  - email => taro.y@coachtech.com
+  - password = password
 
-    - name => 増田 一世
-    - email => issei.m@coachtech.com
-    - password = password
+  - name => 増田 一世
+  - email => issei.m@coachtech.com
+  - password = password
 
-    - name => 山本 敬吉
-    - email => keikichi.y@coachtech.com
-    - password = password
+  - name => 山本 敬吉
+  - email => keikichi.y@coachtech.com
+  - password = password
 
-    - name => 秋田 朋美
-    - email => tomomi.a@coachtech.com
-    - password = password
+  - name => 秋田 朋美
+  - email => tomomi.a@coachtech.com
+  - password = password
 
-    - name => 中西 教夫
-    - email => norio.n@coachtech.com
-    - password = password
-
+  - name => 中西 教夫
+  - email => norio.n@coachtech.com
+  - password = password
 
 ### Seederデータについて
 
@@ -135,11 +138,12 @@ Seeder実行月の平日分の勤怠データを作成し、
 祝日判定は行っていないため、祝日が土日以外の場合は勤務データが作成されます。
 
 勤務パターンは固定です。
+
 - 出勤：09:00
 - 退勤：18:00
 - 休憩：12:00〜13:00
 
-また、申請一覧表示確認用として、西伶奈ユーザーに修正申請データを作成しています。
+また、申請一覧表示確認用として、西玲奈ユーザーに修正申請データを作成しています。
 
 ---
 
@@ -215,12 +219,13 @@ erDiagram
         timestamp updated_at
     }
 ```
+
 ### ER図補足
 
 - `users.role` により、一般ユーザーと管理者を判別します。
 - `attendances` は `user_id` と `work_date` の組み合わせをユニークにしています。
 - `attendance_correction_requests.status` は申請状態を管理します。
-- `attendance_correction_requests.approved_by` は承認した管理者ユーザーを参照します。
+- `attendance_correction_requests.approved_by` は承認処理を行った管理者を参照する外部キーです。
 - `break_correction_requests.break_time_id` は既存休憩を修正する時に使います。新しく休憩を追加する場合はNULLになります。
 
 ---
@@ -228,28 +233,27 @@ erDiagram
 ## 機能一覧
 
 - 一般ユーザー
-    - 新規会員登録
-    - メール認証（新規会員登録時・初回ログイン時）
-    - ログイン
-    - 日時確認
-    - ステータス確認（勤務外・出勤中・休憩中・退勤済）
-    - 勤怠打刻（出勤・休憩・退勤）
-    - 勤怠確認（一覧・前月・翌月）
-    - 詳細確認・修正申請
-    - 申請状況確認（承認待ち・承認済み・詳細）
-    - ログアウト
+  - 新規会員登録
+  - メール認証（新規会員登録時・初回ログイン時）
+  - ログイン
+  - 日時確認
+  - ステータス確認（勤務外・出勤中・休憩中・退勤済）
+  - 勤怠打刻（出勤・休憩・退勤）
+  - 勤怠確認（一覧・前月・翌月）
+  - 詳細確認・修正申請
+  - 申請状況確認（承認待ち・承認済み・詳細）
+  - ログアウト
 
 - 管理者
-    - 管理者ログイン
-    - 全ユーザーの日次勤怠一覧表示（当日・前日・翌日）
-    - 勤怠詳細確認（項目編集・直接修正）
-    - 全一般ユーザーの一覧表示
-    - 各ユーザーの月次勤怠一覧表示（一覧・前月・翌月）
-    - 詳細表示
-    - CSV出力・ダウンロード
-    - 修正申請一覧表示（承認待ち・承認済み・申請詳細）
-    - 修正申請承認（詳細表示・承認）
-    - ログアウト
+  - 管理者ログイン
+  - 全ユーザーの日次勤怠一覧表示（当日・前日・翌日）
+  - 勤怠詳細確認（項目編集・直接修正）
+  - 全一般ユーザーの一覧表示
+  - 各ユーザーの月次勤怠一覧表示（一覧・前月・翌月）
+  - 詳細表示
+  - CSV出力・ダウンロード
+  - 修正申請一覧表示（承認待ち・承認済み・申請詳細）
+  - 修正申請承認（詳細表示・承認）
+  - ログアウト
 
 ---
-
