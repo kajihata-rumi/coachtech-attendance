@@ -1,27 +1,8 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <title>管理者：勤怠詳細</title>
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-</head>
-<body>
-    <header class="header">
-        <a class="header__logo" href="/admin/attendance/list">
-            <img class="header__logo-img" src="{{ asset('images/coachtech-logo.png') }}" alt="COACHTECH">
-        </a>
+@extends('layouts.admin')
 
-        <nav>
-            <a href="/admin/attendance/list">勤怠一覧</a>
-            <a href="/admin/staff/list">スタッフ一覧</a>
-            <a href="{{ route('stamp_correction_request.list') }}">申請一覧</a>
+@section('title', '管理者：勤怠詳細')
 
-            <form action="{{ route('admin.logout') }}" method="POST" style="display:inline;">
-                @csrf
-                <button type="submit">ログアウト</button>
-            </form>
-        </nav>
-    </header>
+@section('content')
 
     <main>
         <h1>勤怠詳細</h1>
@@ -32,8 +13,8 @@
         @endphp
 
         <form action="{{ route('admin.attendance.update', $attendance) }}" method="POST">
-    @csrf
-    @method('PATCH')
+            @csrf
+            @method('PATCH')
             <table class="detail-table">
                 <tr>
                     <th>名前</th>
@@ -58,19 +39,11 @@
                     <th>出勤・退勤</th>
                     <td>
                         <div class="detail-table__time-range">
-                            <input
-                                class="detail-table__time-input"
-                                type="text"
-                                name="clock_in"
-                                value="{{ $attendance->clock_in ? \Carbon\Carbon::parse($attendance->clock_in)->format('H:i') : '' }}"
-                            >
+                            <input class="detail-table__time-input" type="text" name="clock_in"
+                                value="{{ $attendance->clock_in ? \Carbon\Carbon::parse($attendance->clock_in)->format('H:i') : '' }}">
                             <span>〜</span>
-                            <input
-                                class="detail-table__time-input"
-                                type="text"
-                                name="clock_out"
-                                value="{{ $attendance->clock_out ? \Carbon\Carbon::parse($attendance->clock_out)->format('H:i') : '' }}"
-                            >
+                            <input class="detail-table__time-input" type="text" name="clock_out"
+                                value="{{ $attendance->clock_out ? \Carbon\Carbon::parse($attendance->clock_out)->format('H:i') : '' }}">
                         </div>
                     </td>
                 </tr>
@@ -79,19 +52,11 @@
                     <th>休憩</th>
                     <td>
                         <div class="detail-table__time-range">
-                            <input
-                                class="detail-table__time-input"
-                                type="text"
-                                name="breaks[0][start]"
-                                value="{{ $break1 && $break1->break_start ? \Carbon\Carbon::parse($break1->break_start)->format('H:i') : '' }}"
-                            >
+                            <input class="detail-table__time-input" type="text" name="breaks[0][start]"
+                                value="{{ $break1 && $break1->break_start ? \Carbon\Carbon::parse($break1->break_start)->format('H:i') : '' }}">
                             <span>〜</span>
-                            <input
-                                class="detail-table__time-input"
-                                type="text"
-                                name="breaks[0][end]"
-                                value="{{ $break1 && $break1->break_end ? \Carbon\Carbon::parse($break1->break_end)->format('H:i') : '' }}"
-                            >
+                            <input class="detail-table__time-input" type="text" name="breaks[0][end]"
+                                value="{{ $break1 && $break1->break_end ? \Carbon\Carbon::parse($break1->break_end)->format('H:i') : '' }}">
                         </div>
                     </td>
                 </tr>
@@ -100,19 +65,11 @@
                     <th>休憩2</th>
                     <td>
                         <div class="detail-table__time-range">
-                            <input
-                                class="detail-table__time-input"
-                                type="text"
-                                name="breaks[1][start]"
-                                value="{{ $break2 && $break2->break_start ? \Carbon\Carbon::parse($break2->break_start)->format('H:i') : '' }}"
-                            >
+                            <input class="detail-table__time-input" type="text" name="breaks[1][start]"
+                                value="{{ $break2 && $break2->break_start ? \Carbon\Carbon::parse($break2->break_start)->format('H:i') : '' }}">
                             <span>〜</span>
-                            <input
-                                class="detail-table__time-input"
-                                type="text"
-                                name="breaks[1][end]"
-                                value="{{ $break2 && $break2->break_end ? \Carbon\Carbon::parse($break2->break_end)->format('H:i') : '' }}"
-                            >
+                            <input class="detail-table__time-input" type="text" name="breaks[1][end]"
+                                value="{{ $break2 && $break2->break_end ? \Carbon\Carbon::parse($break2->break_end)->format('H:i') : '' }}">
                         </div>
                     </td>
                 </tr>
@@ -121,10 +78,7 @@
                     <th>備考</th>
                     <td>
                         <div class="detail-table__reason">
-                            <textarea
-                                class="detail-table__textarea"
-                                name="note"
-                            >{{ $attendance->note ?? '' }}</textarea>
+                            <textarea class="detail-table__textarea" name="note">{{ $attendance->note ?? '' }}</textarea>
                         </div>
                     </td>
                 </tr>
@@ -143,5 +97,4 @@
             </div>
         </form>
     </main>
-</body>
-</html>
+@endsection
