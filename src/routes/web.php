@@ -33,7 +33,15 @@ Route::middleware('admin.auth')->group(function () {
 
     Route::get('/admin/attendance/staff/{id}/csv', [AdminStaffController::class, 'exportCsv'])
     ->name('admin.attendance.staff.csv');
-});
+
+    Route::get('/stamp_correction_request/approve/{attendance_correct_request_id}', [AttendanceController::class, 'approve'])
+    ->name('stamp_correction_request.approve');
+
+    Route::patch('/stamp_correction_request/approve/{attendance_correction_request_id}', [AttendanceController::class, 'approveUpdate'])
+    ->name('stamp_correction_request.approve.update');
+
+    });
+
 
 Route::get('/home', function () {
     return redirect('/attendance');
@@ -67,9 +75,4 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/stamp_correction_request/list', [AttendanceController::class, 'correctionRequestList'])
     ->name('stamp_correction_request.list');
 
-    Route::get('/stamp_correction_request/approve/{attendance_correct_request_id}', [AttendanceController::class, 'approve'])
-    ->name('stamp_correction_request.approve');
-    });
-
-    Route::patch('/stamp_correction_request/approve/{attendance_correction_request_id}', [AttendanceController::class, 'approveUpdate'])
-    ->name('stamp_correction_request.approve.update');
+});
