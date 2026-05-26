@@ -12,8 +12,28 @@ Route::get('/', function () {
 
 Route::get('/admin/login', [LoginController::class, 'showLoginForm']);
 Route::post('/admin/login', [LoginController::class, 'login']);
-Route::post('/admin/logout', [LoginController::class, 'logout'])
+
+Route::middleware('admin.auth')->group(function () {
+    Route::post('/admin/logout', [LoginController::class, 'logout'])
     ->name('admin.logout');
+    Route::get('/admin/attendance/list', [AdminAttendanceController::class, 'index'])
+    ->name('admin.attendance.list');
+
+    Route::get('/admin/attendance/{attendance}', [AdminAttendanceController::class, 'show'])
+    ->name('admin.attendance.show');
+
+    Route::patch('/admin/attendance/{attendance}', [AdminAttendanceController::class, 'update'])
+    ->name('admin.attendance.update');
+
+    Route::get('/admin/staff/list', [AdminStaffController::class, 'index'])
+    ->name('admin.staff.list');
+
+    Route::get('/admin/attendance/staff/{id}', [AdminStaffController::class, 'attendance'])
+    ->name('admin.attendance.staff');
+
+    Route::get('/admin/attendance/staff/{id}/csv', [AdminStaffController::class, 'exportCsv'])
+    ->name('admin.attendance.staff.csv');
+});
 
 Route::get('/home', function () {
     return redirect('/attendance');
@@ -53,21 +73,3 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::patch('/stamp_correction_request/approve/{attendance_correction_request_id}', [AttendanceController::class, 'approveUpdate'])
     ->name('stamp_correction_request.approve.update');
-
-    Route::get('/admin/attendance/list', [AdminAttendanceController::class, 'index'])
-    ->name('admin.attendance.list');
-
-    Route::get('/admin/attendance/{attendance}', [AdminAttendanceController::class, 'show'])
-    ->name('admin.attendance.show');
-
-    Route::patch('/admin/attendance/{attendance}', [AdminAttendanceController::class, 'update'])
-    ->name('admin.attendance.update');
-
-    Route::get('/admin/staff/list', [AdminStaffController::class, 'index'])
-    ->name('admin.staff.list');
-
-    Route::get('/admin/attendance/staff/{id}', [AdminStaffController::class, 'attendance'])
-    ->name('admin.attendance.staff');
-
-    Route::get('/admin/attendance/staff/{id}/csv', [AdminStaffController::class, 'exportCsv'])
-    ->name('admin.attendance.staff.csv');
