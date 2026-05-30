@@ -23,6 +23,7 @@ class AttendanceDetailTest extends TestCase
     {
         Carbon::setTestNow(Carbon::parse('2026-05-15 09:00:00'));
 
+        /** @var User $user */
         $user = User::factory()->create([
             'name' => '山田太郎',
             'email_verified_at' => now(),
@@ -47,6 +48,7 @@ class AttendanceDetailTest extends TestCase
     {
         Carbon::setTestNow(Carbon::parse('2026-05-15 09:00:00'));
 
+        /** @var User $user */
         $user = User::factory()->create([
             'email_verified_at' => now(),
         ]);
@@ -71,6 +73,7 @@ class AttendanceDetailTest extends TestCase
     {
         Carbon::setTestNow(Carbon::parse('2026-05-15 09:00:00'));
 
+        /** @var User $user */
         $user = User::factory()->create([
             'email_verified_at' => now(),
         ]);
@@ -95,6 +98,7 @@ class AttendanceDetailTest extends TestCase
     {
         Carbon::setTestNow(Carbon::parse('2026-05-15 09:00:00'));
 
+        /** @var User $user */
         $user = User::factory()->create([
             'email_verified_at' => now(),
         ]);
