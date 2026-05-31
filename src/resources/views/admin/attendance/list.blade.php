@@ -1,29 +1,8 @@
-<!DOCTYPE html>
-<html lang="ja">
+@extends('layouts.admin')
 
-<head>
-    <meta charset="UTF-8">
-    <title>管理者：勤怠一覧</title>
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-</head>
+@section('title', '管理者：勤怠一覧')
 
-<body>
-    <header class="header">
-        <a class="header__logo" href="{{ route('admin.attendance.list') }}">
-            <img class="header__logo-img" src="{{ asset('images/coachtech-logo.png') }}" alt="COACHTECH">
-        </a>
-
-        <nav>
-            <a href="{{ route('admin.attendance.list') }}">勤怠一覧</a>
-            <a href="{{ route('admin.staff.list') }}">スタッフ一覧</a>
-            <a href="{{ route('stamp_correction_request.list') }}">申請一覧</a>
-
-            <form action="{{ route('admin.logout') }}" method="POST" style="display:inline;">
-                @csrf
-                <button type="submit">ログアウト</button>
-            </form>
-        </nav>
-    </header>
+@section('content')
 
     <main>
         <h1>{{ $targetDate->format('Y年n月j日') }}の勤怠</h1>
@@ -35,8 +14,7 @@
             </a>
 
             <div class="attendance-list__current-month">
-                <img class="attendance-list__calendar-icon" src="{{ asset('images/calendar-icon.png') }}"
-                    alt="カレンダーアイコン">
+                <img class="attendance-list__calendar-icon" src="{{ asset('images/calendar-icon.png') }}" alt="カレンダーアイコン">
                 <strong>{{ $targetDate->format('Y/m/d') }}</strong>
             </div>
 
@@ -80,6 +58,4 @@
             </tbody>
         </table>
     </main>
-</body>
-
-</html>
+@endsection
