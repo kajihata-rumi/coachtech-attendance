@@ -1,5 +1,3 @@
-# 勤怠管理アプリ
-
 ---
 
 ## 環境構築
@@ -169,21 +167,22 @@ GitHub上ではER図として自動表示されます。
 
 ```mermaid
 erDiagram
-    users ||--o{ attendances : has
-    attendances ||--o{ break_times : has
-    users ||--o{ attendance_correction_requests : requests
-    users ||--o{ attendance_correction_requests : approves
-    attendances ||--o{ attendance_correction_requests : has
-    attendance_correction_requests ||--o{ break_correction_requests : has
-    break_times ||--o{ break_correction_requests : has
-
     users {
         bigint id PK
         string name
         string email UK
         timestamp email_verified_at
         string password
-        string role
+        string remember_token
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    admins {
+        bigint id PK
+        string name
+        string email UK
+        string password
         string remember_token
         timestamp created_at
         timestamp updated_at
@@ -233,11 +232,19 @@ erDiagram
         timestamp created_at
         timestamp updated_at
     }
+
+    users ||--o{ attendances : "has"
+    attendances ||--o{ break_times : "has"
+    attendances ||--o{ attendance_correction_requests : "has"
+    users ||--o{ attendance_correction_requests : "requests"
+    users ||--o{ attendance_correction_requests : "approves"
+    attendance_correction_requests ||--o{ break_correction_requests : "has"
+    break_times ||--o{ break_correction_requests : "has"
 ```
 
 ### ER図補足
 
-- `users.role` により、一般ユーザーと管理者を判別します。
+- 一般ユーザーは `users` テーブル、管理者は `admins` テーブルで管理しています。
 - `attendances` は `user_id` と `work_date` の組み合わせをユニークにしています。
 - `attendance_correction_requests.status` は申請状態を管理します。
 - `attendance_correction_requests.approved_by` は承認処理を行った管理者を参照する外部キーです。
