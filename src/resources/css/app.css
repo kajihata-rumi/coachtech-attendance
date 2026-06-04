@@ -932,12 +932,6 @@ table.correction-request__table td:nth-child(2) {
     height: 30px;
 }
 
-.admin-staff-attendance__csv {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 45px;
-}
-
 .admin-staff-attendance__csv-button {
     display: flex;
     align-items: center;
@@ -970,3 +964,4 @@ table.approval-detail-table th {
     text-align: left;
     padding-left: 70px;
 }
+
