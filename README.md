@@ -1,3 +1,10 @@
+# coachtech勤怠管理アプリ
+
+Laravelで作成した勤怠管理アプリです。
+
+一般ユーザーは、会員登録・ログイン・メール認証・勤怠打刻・勤怠確認・修正申請を行えます。  
+管理者は、管理者ログイン・全ユーザーの勤怠確認・勤怠修正・修正申請の承認・CSV出力を行えます。
+
 ---
 
 ## 環境構築
@@ -237,7 +244,7 @@ erDiagram
     attendances ||--o{ break_times : "has"
     attendances ||--o{ attendance_correction_requests : "has"
     users ||--o{ attendance_correction_requests : "requests"
-    users ||--o{ attendance_correction_requests : "approves"
+    admins ||--o{ attendance_correction_requests : "approves"
     attendance_correction_requests ||--o{ break_correction_requests : "has"
     break_times ||--o{ break_correction_requests : "has"
 ```
