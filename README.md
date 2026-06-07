@@ -1,4 +1,4 @@
-# coachtech勤怠管理アプリ
+# COACHTECH勤怠管理アプリ
 
 Laravelで作成した勤怠管理アプリです。
 
