@@ -14,13 +14,13 @@ Laravelで作成した勤怠管理アプリです。
 ```bash
 git clone https://github.com/kajihata-rumi/coachtech-attendance.git
 cd coachtech-attendance
-docker-compose up -d --build
+docker compose up -d --build
 ```
 
 ### Laravel環境構築
 
 ```bash
-docker-compose exec php bash
+docker compose exec php bash
 composer install
 cp .env.example .env
 ```
@@ -30,6 +30,7 @@ cp .env.example .env
 ```bash
 php artisan key:generate
 php artisan migrate --seed
+exit
 ```
 
 ---
@@ -59,6 +60,25 @@ MAIL_FROM_NAME="${APP_NAME}"
 APP_URL=http://localhost
 ```
 
+## PHPUnitテスト
+
+### テスト用データベースの作成
+
+PHPUnitテストを実行する前に、テスト用データベースを作成します。
+以下のコマンドは、PHPコンテナ内ではなく、ホスト側（Mac側）のターミナルで実行してください。
+
+```bash
+docker compose exec mysql mysql -u root -proot -e "CREATE DATABASE IF NOT EXISTS attendance_test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci; GRANT ALL PRIVILEGES ON attendance_test.* TO 'laravel_user'@'%'; FLUSH PRIVILEGES;"
+```
+
+### テスト実行
+
+以下のコマンドでテストを実行します。
+
+```bash
+docker compose exec php php artisan test
+```
+
 ---
 
 ## 使用技術
@@ -71,23 +91,6 @@ APP_URL=http://localhost
 - Docker Compose v5.1.3
 - MailHog
 - Laravel Fortify
-
----
-
-## テスト実行
-
-PHPUnitテストは以下のコマンドで実行できます。
-
-```bash
-docker-compose exec php bash
-php artisan test
-```
-
-PHPコンテナ内では、以下のコマンドでも実行できます。
-
-```bash
-vendor/bin/phpunit
-```
 
 ---
 
@@ -155,15 +158,11 @@ UI仕様書ではサンプルとして2023年の日付が表示されていま�
 本アプリでは実際の出勤日を基準に勤怠登録・表示を行うため、
 Seederでは実行月の年月を使用して勤怠データを作成しています。
 
-Seeder実行月の平日分の勤怠データを作成し、
-土日は勤務データを作成していません。
+勤怠データは、実行月1日から実行日当日までの平日分をSeederで作成しています。
+過去の平日は、出勤 09:00、退勤 18:00、休憩 12:00〜13:00 の退勤済みデータです。
+実行日当日が平日の場合は、出勤 09:00、休憩・退勤なしの勤務中データとして作成しています。
+未来日の勤怠データは作成していません。
 祝日判定は行っていないため、祝日が土日以外の場合は勤務データが作成されます。
-
-勤務パターンは固定です。
-
-- 出勤：09:00
-- 退勤：18:00
-- 休憩：12:00〜13:00
 
 ---
 

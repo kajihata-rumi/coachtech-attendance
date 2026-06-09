@@ -10,7 +10,7 @@ class BreakTimeSeeder extends Seeder
 {
     public function run()
     {
-        $attendances = Attendance::all();
+        $attendances = Attendance::whereNotNull('clock_out')->get();
 
         foreach ($attendances as $attendance) {
             BreakTime::create([

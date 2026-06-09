@@ -13,9 +13,11 @@ class AttendanceSeeder extends Seeder
     {
         $users = User::where('role', 'user')->get();
 
+        $today = now()->startOfDay();
+
         $period = CarbonPeriod::create(
-            now()->startOfMonth(),
-            now()->endOfMonth()
+            $today->copy()->startOfMonth(),
+            $today
         );
 
         foreach ($users as $user) {
@@ -24,12 +26,14 @@ class AttendanceSeeder extends Seeder
                     continue;
                 }
 
+                $isToday = $date->isSameDay($today);
+
                 Attendance::create([
                     'user_id' => $user->id,
                     'work_date' => $date->format('Y-m-d'),
                     'clock_in' => '09:00:00',
-                    'clock_out' => '18:00:00',
-                    'status' => 'completed',
+                    'clock_out' => $isToday ? null : '18:00:00',
+                    'status' => $isToday ? 'working' : 'completed',
                     'note' => null,
                 ]);
             }
